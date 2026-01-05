@@ -2,55 +2,47 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>GERENCIADOR: nenasbenas/Lista_public</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Suporte - Lista Public</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K8X3JQVJ13"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-K8X3JQVJ13');
+    </script>
+
     <style>
-        body { background: #000510; color: #fff; font-family: sans-serif; text-align: center; padding: 50px; }
-        .box { border: 2px solid #00aaff; padding: 20px; border-radius: 10px; display: inline-block; background: #111; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
-        button { background: #00ccff; border: none; padding: 15px; width: 100%; color: #000; font-weight: bold; cursor: pointer; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #1a1a1a; color: white; }
+        .container { max-width: 500px; margin: auto; background: #2a2a2a; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { color: #00ff00; font-size: 24px; }
+        .info-box { background: #333; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #444; }
+        .btn { background: #007bff; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: block; margin: 10px 0; font-weight: bold; }
+        .btn-ibo { background: #f39c12; }
+        .link-text { font-size: 11px; color: #aaa; word-break: break-all; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>GERENCIADOR: nenasbenas/Lista_public</h2>
-        <input type="password" id="token" placeholder="CHAVE MESTRA (TOKEN):">
-        <input type="text" id="url" placeholder="LINK PARA ADICIONAR:">
-        <button onclick="sincronizar()">SINCRONIZAR NO BACKUP 2026</button>
-        <p id="status"></p>
+    <div class="container">
+        <h1>Configuração de Lista</h1>
+        <p>Selecione seu aplicativo abaixo:</p>
+
+        <div class="info-box">
+            <strong>Para SS IPTV / Outros:</strong>
+            <a href="https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u" class="btn">Abrir Link da Lista</a>
+        </div>
+
+        <div class="info-box">
+            <strong>Para IBO PLAYER:</strong>
+            <p style="font-size: 14px;">Copie o link abaixo e cole no site do IBO Player:</p>
+            <div class="link-text">https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u</div>
+            <a href="https://iboplayer.com/device/login" target="_blank" class="btn btn-ibo">Ir para Site do IBO Player</a>
+        </div>
+
+        <p style="font-size: 10px; color: #666; margin-top: 20px;">
+            ID de Monitoramento: G-K8X3JQVJ13 | Backup Ativo [cite: 2026-01-05]
+        </p>
     </div>
-
-    <script>
-        async function sincronizar() {
-            const token = document.getElementById('token').value;
-            const url = document.getElementById('url').value;
-            const status = document.getElementById('status');
-            const repo = 'nenasbenas/lista_public';
-            const path = 'player_completo.m3u'; // Nome exato do seu arquivo
-
-            status.innerText = "Sincronizando...";
-
-            try {
-                const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                const data = await res.json();
-                const content = atob(data.sha ? data.content : "");
-                const newContent = btoa(content + "\n" + url);
-
-                const update = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: "Update via Panel",
-                        content: newContent,
-                        sha: data.sha
-                    })
-                });
-
-                if(update.ok) { status.innerText = "SINCRONIZADO COM SUCESSO!"; }
-                else { status.innerText = "Erro na Chave Mestra!"; }
-            } catch(e) { status.innerText = "Erro de Conexão!"; }
-        }
-    </script>
 </body>
 </html>
