@@ -1,0 +1,24 @@
+#EXTM3U
+# LISTA PRIVADA - MODO INVISÍVEL - BACKUP ATIVO
+
+# --- [TV KIDMAIS - NOVO TESTE] ---
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+#EXTINF:-1, [PLAY] TV KIDMAIS
+https://rede-qdm.tvr.ovh/tv-kidmais/tv-kidmais/playlist.m3u8
+
+# --- [REDE IS TV - VALIDADO] ---
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+#EXTINF:-1, [PLAY] REDE IS TV HD
+https://video10.logicahost.com.br/redeistv/redeistv/playlist.m3u8
+
+# --- [BRADOKY TV - VALIDADO] ---
+#EXTVLCOPT:http-user-agent=SoulTV/1.5.0
+#EXTVLCOPT:http-referrer=https://www.soultv.com.br/
+#EXTINF:-1, [PLAY] BRADOKY TV
+https://video01.soultv.com.br/bradoky/bradoky/playlist.m3u8
+
+# --- [RECORD TV - EXTRAÇÃO DIRETA] ---
+#EXTVLCOPT:http-user-agent=SoulTV/1.5.0
+#EXTVLCOPT:http-referrer=https://www.soultv.com.br/
+#EXTINF:-1, [PLAY] RECORD TV HD
+https://video01.soultv.com.br/recordtv/recordtv/playlist.m3u8
