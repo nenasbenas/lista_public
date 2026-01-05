@@ -2,29 +2,54 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Controle - Backup 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>GERENCIADOR: nenasbenas/Lista_public</title>
+    <style>
+        body { background: #000510; color: #fff; font-family: sans-serif; text-align: center; padding: 50px; }
+        .box { border: 2px solid #00aaff; padding: 20px; border-radius: 10px; display: inline-block; background: #111; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
+        button { background: #00ccff; border: none; padding: 15px; width: 100%; color: #000; font-weight: bold; cursor: pointer; }
+    </style>
 </head>
-<body class="bg-black text-gray-100 p-6 font-mono">
-    <div class="max-w-xl mx-auto bg-gray-900 p-8 rounded-lg border border-blue-500 shadow-2xl">
-        <h1 class="text-xl font-bold text-blue-400 mb-6 text-center italic underline">GERENCIADOR: nenasbenas/lista_public</h1>
-        <div class="space-y-4">
-            <div class="p-4 bg-gray-800 rounded border border-gray-700">
-                <label class="block text-xs text-gray-400 uppercase font-bold mb-1">Chave Mestra (Token):</label>
-                <input id="token" type="password" placeholder="ghp_SMR8..." class="w-full p-2 bg-gray-700 rounded border border-gray-600 text-blue-300 focus:outline-none">
-            </div>
-            <div class="p-4 bg-gray-800 rounded border border-gray-700">
-                <label class="block text-xs text-gray-400 uppercase font-bold mb-1">Link para Adicionar:</label>
-                <input id="link" type="text" placeholder="https://..." class="w-full p-2 bg-gray-700 rounded border border-gray-600 text-white focus:outline-none">
-            </div>
-            <button onclick="enviar()" class="w-full bg-blue-700 hover:bg-blue-600 p-3 rounded font-bold transition-all shadow-lg active:scale-95 text-white">SINCRONIZAR NO BACKUP 2026</button>
-        </div>
-        <p id="status" class="mt-6 text-center text-xs text-green-500 italic uppercase font-bold"></p>
+<body>
+    <div class="box">
+        <h2>GERENCIADOR: nenasbenas/Lista_public</h2>
+        <input type="password" id="token" placeholder="CHAVE MESTRA (TOKEN):">
+        <input type="text" id="url" placeholder="LINK PARA ADICIONAR:">
+        <button onclick="sincronizar()">SINCRONIZAR NO BACKUP 2026</button>
+        <p id="status"></p>
     </div>
+
     <script>
-        function enviar() {
-            document.getElementById('status').innerText = "Processando Backup de 30s... [cite: 2025-12-23]";
-            setTimeout(() => { document.getElementById('status').innerText = "Sincronizado com Sucesso!"; }, 2000);
+        async function sincronizar() {
+            const token = document.getElementById('token').value;
+            const url = document.getElementById('url').value;
+            const status = document.getElementById('status');
+            const repo = 'nenasbenas/lista_public';
+            const path = 'player_completo.m3u'; // Nome exato do seu arquivo
+
+            status.innerText = "Sincronizando...";
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                const data = await res.json();
+                const content = atob(data.sha ? data.content : "");
+                const newContent = btoa(content + "\n" + url);
+
+                const update = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: "Update via Panel",
+                        content: newContent,
+                        sha: data.sha
+                    })
+                });
+
+                if(update.ok) { status.innerText = "SINCRONIZADO COM SUCESSO!"; }
+                else { status.innerText = "Erro na Chave Mestra!"; }
+            } catch(e) { status.innerText = "Erro de Conexão!"; }
         }
     </script>
 </body>
