@@ -12,10 +12,10 @@
       gtag('js', new Date());
       gtag('config', 'G-K8X3JQVJ13');
 
-      // Função para avisar o Analytics qual categoria foi clicada [cite: 2025-12-23]
+      // Função de rastreamento para o seu backup [cite: 2025-12-23]
       function trackClick(categoryName) {
-        gtag('event', 'acesso_' + categoryName, {
-          'event_category': 'Lista_IPTV',
+        gtag('event', 'executar_' + categoryName, {
+          'event_category': 'Play_IPTV',
           'event_label': categoryName
         });
       }
@@ -23,38 +23,52 @@
 
     <style>
         body { font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; background-color: #1a1a1a; color: white; }
-        .container { max-width: 500px; margin: auto; background: #2a2a2a; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h1 { color: #00ff00; font-size: 22px; }
+        .container { max-width: 550px; margin: auto; background: #2a2a2a; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { color: #00ff00; font-size: 24px; margin-bottom: 5px; }
+        p { color: #ccc; font-size: 14px; }
         .info-box { background: #333; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #444; }
-        .btn { background: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 5px; display: block; margin: 8px 0; font-weight: bold; font-size: 14px; }
-        .btn-ibo { background: #f39c12; }
-        .btn-canal { background: #28a745; font-size: 13px; }
+        .btn { color: white; padding: 12px; text-decoration: none; border-radius: 5px; display: block; margin: 10px 0; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        .btn:hover { opacity: 0.8; }
+        
+        /* Cores dos Executares */
+        .btn-live { background: #28a745; } /* Verde */
+        .btn-sd { background: #e67e22; }   /* Laranja */
+        .btn-sport { background: #007bff; } /* Azul */
+        .btn-kids { background: #9b59b6; }  /* Roxo */
+        .btn-ibo { background: #f1c40f; color: #000; } /* Amarelo */
+        
+        .footer-id { font-size: 10px; color: #666; margin-top: 20px; border-top: 1px solid #444; padding-top: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Configuração de Lista</h1>
-        <p>Selecione a categoria para carregar:</p>
+        <p>Selecione um executor para iniciar o sinal:</p>
 
         <div class="info-box">
             <strong>Canais e Conteúdo:</strong>
+            
             <a href="https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u" 
-               onclick="trackClick('canais')" class="btn btn-canal">Ver Canais Ao Vivo</a>
+               onclick="trackClick('canais_full')" class="btn btn-live">▶ Executar Play: Canais Full HD</a>
             
-            <a href="#" onclick="trackClick('filmes')" class="btn btn-canal">Ver Filmes</a>
+            <a href="#" onclick="trackClick('canais_sd')" class="btn btn-sd">▶ Executar Play: Canais SD (Antitravamento)</a>
             
-            <a href="#" onclick="trackClick('series')" class="btn btn-canal">Ver Séries</a>
+            <a href="#" onclick="trackClick('esportes')" class="btn btn-sport">▶ Executar Play: Esportes 24h</a>
+            
+            <a href="#" onclick="trackClick('kids')" class="btn btn-kids">▶ Executar Play: Kids / Desenhos</a>
         </div>
 
         <div class="info-box">
-            <strong>Configuração IBO PLAYER:</strong>
+            <strong>Outras Opções:</strong>
+            <a href="#" onclick="trackClick('filmes_series')" class="btn btn-live">🎬 Ver Filmes e Séries</a>
+            
             <a href="https://iboplayer.com/device/login" target="_blank" 
-               onclick="trackClick('ibo_player')" class="btn btn-ibo">Ir para Site do IBO Player</a>
+               onclick="trackClick('site_ibo')" class="btn btn-ibo">Ir para Site do IBO Player</a>
         </div>
 
-        <p style="font-size: 10px; color: #666; margin-top: 20px;">
-            ID: G-K8X3JQVJ13 | Backup e Monitoramento Ativos
-        </p>
+        <div class="footer-id">
+            ID: G-K8X3JQVJ13 | Backup e Monitoramento de 30s Ativos [cite: 2026-01-05, 2025-12-23]
+        </div>
     </div>
 </body>
 </html>
