@@ -11,37 +11,49 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-K8X3JQVJ13');
+
+      // Função para avisar o Analytics qual categoria foi clicada [cite: 2025-12-23]
+      function trackClick(categoryName) {
+        gtag('event', 'acesso_' + categoryName, {
+          'event_category': 'Lista_IPTV',
+          'event_label': categoryName
+        });
+      }
     </script>
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #1a1a1a; color: white; }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; background-color: #1a1a1a; color: white; }
         .container { max-width: 500px; margin: auto; background: #2a2a2a; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h1 { color: #00ff00; font-size: 24px; }
-        .info-box { background: #333; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #444; }
-        .btn { background: #007bff; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: block; margin: 10px 0; font-weight: bold; }
+        h1 { color: #00ff00; font-size: 22px; }
+        .info-box { background: #333; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #444; }
+        .btn { background: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 5px; display: block; margin: 8px 0; font-weight: bold; font-size: 14px; }
         .btn-ibo { background: #f39c12; }
-        .link-text { font-size: 11px; color: #aaa; word-break: break-all; }
+        .btn-canal { background: #28a745; font-size: 13px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Configuração de Lista</h1>
-        <p>Selecione seu aplicativo abaixo:</p>
+        <p>Selecione a categoria para carregar:</p>
 
         <div class="info-box">
-            <strong>Para SS IPTV / Outros:</strong>
-            <a href="https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u" class="btn">Abrir Link da Lista</a>
+            <strong>Canais e Conteúdo:</strong>
+            <a href="https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u" 
+               onclick="trackClick('canais')" class="btn btn-canal">Ver Canais Ao Vivo</a>
+            
+            <a href="#" onclick="trackClick('filmes')" class="btn btn-canal">Ver Filmes</a>
+            
+            <a href="#" onclick="trackClick('series')" class="btn btn-canal">Ver Séries</a>
         </div>
 
         <div class="info-box">
-            <strong>Para IBO PLAYER:</strong>
-            <p style="font-size: 14px;">Copie o link abaixo e cole no site do IBO Player:</p>
-            <div class="link-text">https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u</div>
-            <a href="https://iboplayer.com/device/login" target="_blank" class="btn btn-ibo">Ir para Site do IBO Player</a>
+            <strong>Configuração IBO PLAYER:</strong>
+            <a href="https://iboplayer.com/device/login" target="_blank" 
+               onclick="trackClick('ibo_player')" class="btn btn-ibo">Ir para Site do IBO Player</a>
         </div>
 
         <p style="font-size: 10px; color: #666; margin-top: 20px;">
-            ID de Monitoramento: G-K8X3JQVJ13 | Backup Ativo [cite: 2026-01-05]
+            ID: G-K8X3JQVJ13 | Backup e Monitoramento Ativos
         </p>
     </div>
 </body>
