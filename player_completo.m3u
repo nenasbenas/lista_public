@@ -17,18 +17,19 @@ https://video01.soultv.com.br/bradoky/bradoky/playlist.m3u8
 
 # --- [ GRUPO: SERVIDOR SIBFUNGOLD ] ---
 
-#EXTINF:-1 tvg-name="BR: A&E" group-title="LAME | BRAZIL VIP",BR: A&E
+#EXTINF:-1 tvg-name="BR: A&E lindomar" group-title="LAME | BRAZIL VIP",BR: A&E
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4829
-#EXTINF:-1 tvg-name="BR: AMC" group-title="LAME | BRAZIL VIP",BR: AMC
+#EXTINF:-1 tvg-name="BR: AMC lindomar" group-title="LAME | BRAZIL VIP",BR: AMC
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4830
-#EXTINF:-1 tvg-name="BR: ANIMAL PLANET" group-title="LAME | BRAZIL VIP",BR: ANIMAL PLANET
+#EXTINF:-1 tvg-name="BR: ANIMAL PLANET lindomar" group-title="LAME | BRAZIL VIP",BR: ANIMAL PLANET
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4831
-#EXTINF:-1 tvg-name="BR: RECORD SP" group-title="LAME | BRAZIL VIP",BR: Record SP
+#EXTINF:-1 tvg-name="BR: RECORD SP lindomar" group-title="LAME | BRAZIL VIP",BR: Record SP
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/58731
-#EXTINF:-1 tvg-name="BR: SBT" group-title="LAME | BRAZIL VIP",BR: SBT
+#EXTINF:-1 tvg-name="BR: SBT lindomar" group-title="LAME | BRAZIL VIP",BR: SBT
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4898
 #EXTINF:-1 tvg-name="BR: GLOBO" group-title="LAME | BRAZIL VIP",BR: GLOBO
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4865
+
 
 
 
