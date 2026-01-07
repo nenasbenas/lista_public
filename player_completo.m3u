@@ -3,14 +3,14 @@
 
 # --- [ GRUPO: CANAIS ABERTOS & TESTES ] ---
 
-#EXTINF:-1, [PLAY] TV KIDMAIS
+#EXTINF:-1, [PLAY] lindomaar
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://rede-qdm.tvr.ovh/tv-kidmais/tv-kidmais/playlist.m3u8
 
-#EXTINF:-1, [PLAY] REDE IS TV HD
+#EXTINF:-1, [PLAY] lindomar
 https://video10.logicahost.com.br/redeistv/redeistv/playlist.m3u8
 
-#EXTINF:-1, [PLAY] BRADOKY TV
+#EXTINF:-1, [PLAY] lindomar
 #EXTVLCOPT:http-user-agent=SoulTV/1.5.0
 #EXTVLCOPT:http-referrer=https://www.soultv.com.br/
 https://video01.soultv.com.br/bradoky/bradoky/playlist.m3u8
@@ -29,6 +29,7 @@ http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/58731
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4898
 #EXTINF:-1 tvg-name="BR: GLOBO" group-title="LAME | BRAZIL VIP",BR: GLOBO
 http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4865
+
 
 
 
