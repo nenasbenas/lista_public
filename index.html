@@ -3,45 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrômeda - Acesso Privado</title>
+    <title>Andrômeda OS - Privado</title>
     <style>
-        body { background-color: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .panel { border: 2px solid #00ff41; padding: 20px; background: #1a1a1a; box-shadow: 0 0 15px #00ff41; width: 90%; max-width: 500px; text-align: center; }
-        h2 { font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; }
-        .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        button { background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; text-transform: uppercase; }
-        button:hover { background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; }
-        .footer { margin-top: 20px; font-size: 0.7rem; color: #666; }
-        .status-blink { animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        :root {
+            --neon-green: #00ff95;
+            --bg-dark: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Fundo com estrelas sutis */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            animation: move 100s linear infinite;
+        }
+
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(-50%, -50%); } }
+
+        .panel {
+            position: relative;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        h2 {
+            font-weight: 200;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button:hover {
+            background: var(--neon-green);
+            color: black;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-green);
+            border-color: transparent;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.5;
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--neon-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="panel">
-    <h2><span class="status-blink">●</span> TERRAÇO ANDRÔMEDA - PRIVADO</h2>
+    <h2>ANDRÔMEDA</h2>
+    <p style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7;">ACESSO AO TERRAÇO CONCEDIDO</p>
     
     <div class="grid">
-        <button onclick="executar('TV_LIVE')">📺 TV AO VIVO</button>
-        <button onclick="executar('FILMES')">🎬 FILMES</button>
-        <button onclick="executar('SERIES')">🍿 SÉRIES</button>
+        <button onclick="executar('TV')"><span>📺 TV AO VIVO</span> <span>→</span></button>
+        <button onclick="executar('FILMES')"><span>🎬 FILMES PRIVADOS</span> <span>→</span></button>
+        <button onclick="executar('SERIES')"><span>🍿 SÉRIES ORIGINAIS</span> <span>→</span></button>
         
-        <hr style="border: 0.5px solid #333; width: 100%;">
+        <div style="margin: 10px 0; border-top: 1px solid rgba(255,255,255,0.1);"></div>
         
-        <button onclick="executar('SINAL_01')">EXECUTAR SINAL 01</button>
-        <button onclick="executar('SINAL_02_ESTAVEL')">SINAL 02 (ESTÁVEL)</button>
+        <button onclick="executar('SINAL_01')" style="font-size: 0.8rem; opacity: 0.8;">EXECUTAR SINAL 01</button>
+        <button onclick="executar('SINAL_02')" style="font-size: 0.8rem; border-color: var(--neon-green);">SINAL 02 (ESTÁVEL)</button>
     </div>
 
     <div class="footer">
-        STATUS: ENCRYPTED | BACKUP: ATIVO (30s) | LIBERDADE NIVEL: MÁXIMO
+        <span class="status-dot"></span> BACKUP SINCRONIZADO | 2026
     </div>
 </div>
 
 <script>
-    function executar(tipo) {
-        console.log("Iniciando protocolo: " + tipo);
-        alert("Acessando " + tipo + " em Andrômeda... Backup sincronizado.");
-        // Aqui você pode inserir os links ou as rotas de cada categoria
+    function executar(protocolo) {
+        console.log("Pacto Ativado: " + protocolo);
+        // O sistema agora aguarda os links de integração
     }
 </script>
 
