@@ -21,8 +21,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
-            /* Efeito de fundo com grade */
+            overflow-x: hidden;
             background-image: 
                 linear-gradient(rgba(0, 224, 255, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 224, 255, 0.1) 1px, transparent 1px);
@@ -88,15 +87,25 @@
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        .btn-special {
+        #menu-canais {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px dashed var(--neon-blue);
+            background: rgba(0, 224, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .btn-categoria {
+            font-size: 0.6rem;
+            margin: 5px;
             border-color: var(--neon-pink);
             color: var(--neon-pink);
         }
 
-        .btn-special:hover {
-            background: var(--neon-pink);
-            color: white;
-            box-shadow: 0 0 15px var(--neon-pink);
+        .btn-special {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
         }
 
         .footer {
@@ -124,8 +133,16 @@
     <div class="location">UBERLÂNDIA-MG | TERRAÇO ANDRÔMEDA</div>
     
     <div class="grid">
-        <button class="full-width" onclick="acao('TV AO VIVO')">📺 CANAIS AO VIVO</button>
-        <button onclick="acao('FILMES')">🎬 FILMES</button>
+        <button class="full-width" onclick="toggleCanais()">📺 CANAIS AO VIVO</button>
+        
+        <div id="menu-canais" class="full-width">
+            <p style="font-size: 0.6rem; margin-bottom: 10px;">SELECIONE A CATEGORIA:</p>
+            <button class="btn-categoria" onclick="abrirSinal('DESPORTOS')">⚽ DESPORTOS</button>
+            <button class="btn-categoria" onclick="abrirSinal('FILMES_TV')">🎬 FILMES</button>
+            <button class="btn-categoria" onclick="abrirSinal('NOTICIAS')">🌐 NOTÍCIAS</button>
+        </div>
+
+        <button onclick="acao('FILMES')">🎬 FILMES PRIVADOS</button>
         <button onclick="acao('SÉRIES')">🍿 SÉRIES</button>
         
         <div class="full-width" style="height: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
@@ -135,14 +152,30 @@
     </div>
 
     <div class="footer">
-        <span class="status-dot"></span> SISTEMA HOLOGRÁFICO ATIVO | BACKUP 30S
+        <span class="status-dot"></span> SISTEMA HOLOGRÁFICO ATIVO | BACKUP 30S | LÉO KASAMA
     </div>
 </div>
 
 <script>
+    function toggleCanais() {
+        const menu = document.getElementById('menu-canais');
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        console.log("Léo Programador: Alternando menu de canais.");
+    }
+
+    function abrirSinal(cat) {
+        alert("Léo, a sincronizar sinal de: " + cat);
+        // Aqui vais colocar a tua lista M3U para cada categoria
+        const listas = {
+            'DESPORTOS': 'URL_AQUI',
+            'FILMES_TV': 'URL_AQUI',
+            'NOTICIAS': 'URL_AQUI'
+        };
+        console.log("A carregar lista: " + listas[cat]);
+    }
+
     function acao(tipo) {
-        console.log("Comando recebido: " + tipo);
-        alert("Léo Programador, acessando: " + tipo);
+        alert("Léo Programador, a aceder: " + tipo);
     }
 </script>
 
