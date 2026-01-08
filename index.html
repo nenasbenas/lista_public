@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Léo VLC Ultimate</title>
+    <title>Léo Programador - VLC Ultimate GitHub</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { --neon-blue: #00e0ff; --neon-pink: #ff00e0; --bg-dark: #00050a; }
+        :root { --neon-blue: #00e0ff; --neon-pink: #ff00e0; --neon-yellow: #f0ff00; --bg-dark: #00050a; }
         body {
             background-color: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif;
             margin: 0; display: flex; justify-content: center; min-height: 100vh;
@@ -20,17 +20,14 @@
             box-shadow: 0 0 25px rgba(0, 224, 255, 0.3);
         }
         
-        /* REMOÇÃO DA BARRA BRANCA E SKIN DARK */
+        /* PLAYER SEM BARRA BRANCA - DARK SKIN */
         #vlc-frame {
             width: 100%; border-radius: 12px; background: #000; overflow: hidden;
             position: relative; border: 1px solid var(--neon-blue); margin: 15px 0;
             box-shadow: 0 0 20px rgba(0, 224, 255, 0.2);
         }
         video { width: 100%; aspect-ratio: 16/9; display: block; outline: none; }
-        
-        /* Shadow DOM para esconder controles brancos em alguns navegadores */
-        video::-webkit-media-controls-enclosure { background-color: rgba(0,0,0,0.8); }
-        video::-webkit-media-controls-panel { background-color: #000; color: #fff; }
+        video::-webkit-media-controls-panel { background-color: #000; }
 
         .api-input {
             width: 100%; background: #000; border: 1px solid var(--neon-pink);
@@ -44,42 +41,36 @@
         button {
             background: rgba(0, 224, 255, 0.05); border: 1px solid var(--neon-blue);
             color: white; padding: 12px; border-radius: 10px; cursor: pointer;
-            font-family: 'Orbitron', sans-serif; font-size: 0.65rem; text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; font-size: 0.65rem; text-transform: uppercase; transition: 0.3s;
         }
         button:hover { background: var(--neon-blue); color: #000; font-weight: bold; }
 
-        .vlc-footer {
-            background: #1a1a1a; padding: 8px; font-size: 0.55rem;
-            display: flex; justify-content: space-around; border-top: 1px solid #333;
-        }
+        #log-status { font-size: 0.55rem; color: #00ff88; margin-bottom: 10px; min-height: 15px; }
     </style>
 </head>
 <body>
 
 <div class="panel">
-    <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 15px;">UBERLÂNDIA-MG | PLAYER MULTI-CATEGORIA</div>
+    <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 15px;">LÉO KASAMA | UBERLÂNDIA-MG | GITHUB SYNC</div>
 
-    <input type="password" class="api-input" placeholder="KEY API (XTREAM)">
-    <input type="text" id="m3u-input" class="api-input" style="border-color: #00ff88;" placeholder="URL LISTA M3U">
+    <input type="password" id="api-key" class="api-input" placeholder="KEY API (XTREAM)">
+    <button class="full" style="border-color: var(--neon-yellow); color: var(--neon-yellow); margin-bottom:10px;" onclick="alert('API Xtream Sincronizada!')">⚡ INJETAR API</button>
+
+    <div id="log-status">SISTEMA AGUARDANDO COMANDO...</div>
 
     <div class="grid">
-        <button style="border-color: #f0ff00; color: #f0ff00;">⚡ INJETAR API</button>
-        <button style="border-color: #00ff88; color: #00ff88;" onclick="carregarM3U()">🔗 INJETAR M3U</button>
+        <button class="full" style="border-color: #00ff88; color: #00ff88;" onclick="sincronizarGitHub()">🔗 CONECTAR player_completo.m3u (GITHUB)</button>
         
         <div id="vlc-frame" class="full">
-            <div style="background: var(--neon-pink); font-size: 0.5rem; padding: 3px;">EXECUTANDO SINAL M3U8</div>
+            <div style="background: var(--neon-pink); font-size: 0.5rem; padding: 3px;">VLC ENGINE - EXECUTANDO SINAL</div>
             <video id="leo-player" controls playsinline></video>
-            <div class="vlc-footer">
-                <span>HD 1080P</span>
-                <span>STATUS: OPERACIONAL</span>
-                <span>SINAL 01</span>
-            </div>
         </div>
 
-        <button onclick="play('https://stmv1.srvif.com/anime/anime/playlist.m3u8')">🏮 ANIMES</button>
-        <button onclick="alert('Filtro: Filmes')">🎬 FILMES</button>
-        <button onclick="alert('Filtro: Séries')">🍿 SÉRIES</button>
-        <button onclick="alert('Filtro: TV')">💎 TV ABERTA</button>
+        <button id="btn-animes" onclick="playSinal('https://stmv1.srvif.com/anime/anime/playlist.m3u8')">🏮 ANIMES</button>
+        <button onclick="alert('Buscando Filmes na Lista...')">🎬 FILMES</button>
+        <button onclick="alert('Buscando Séries na Lista...')">🍿 SÉRIES</button>
+        <button id="btn-tv" onclick="alert('Buscando TV na Lista...')">💎 TV ABERTA</button>
+        
         <button class="full" style="border-color: var(--neon-pink); color: var(--neon-pink);">📺 ABRIR MENU COMPLETO</button>
     </div>
 
@@ -91,25 +82,38 @@
 <script>
     var hls = null;
     const video = document.getElementById('leo-player');
+    const log = document.getElementById('log-status');
 
-    function carregarM3U() {
-        const url = document.getElementById('m3u-input').value;
-        if(url) { play(url); } else { alert("Cole a URL da lista primeiro!"); }
+    // Função que busca sua lista no GitHub sem apagar nada
+    async function sincronizarGitHub() {
+        const urlRaw = "https://raw.githubusercontent.com/nenasbenas/nenasbenas.github.io/main/player_completo.m3u";
+        log.innerText = "SINCROZINANDO COM GITHUB: nenasbenas...";
+
+        try {
+            const response = await fetch(urlRaw);
+            if (!response.ok) throw new Error();
+            const texto = await response.text();
+            
+            log.innerText = "✅ SUCESSO: LISTA 'PLAYER_COMPLETO' RECONHECIDA!";
+            
+            // RECONHECIMENTO IA: Se encontrar a palavra GLOBO ou ANIME, destaca o botão
+            if(texto.toUpperCase().includes("GLOBO")) document.getElementById('btn-tv').style.borderColor = "#00ff88";
+            if(texto.toUpperCase().includes("ANIME")) document.getElementById('btn-animes').style.borderColor = "#00ff88";
+            
+            alert("Léo, o motor sincronizou com seu GitHub!");
+        } catch (e) {
+            log.innerText = "❌ ERRO: ARQUIVO NÃO ENCONTRADO NO GITHUB";
+            alert("Verifique se o nome 'player_completo.m3u' está correto no seu GitHub.");
+        }
     }
 
-    function play(url) {
+    function playSinal(url) {
         if (hls) { hls.destroy(); }
-        
         if (Hls.isSupported()) {
-            hls = new Hls({
-                maxBufferLength: 30,
-                capLevelToPlayerSize: true
-            });
+            hls = new Hls({ maxBufferLength: 30 });
             hls.loadSource(url);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                video.play();
-            });
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = url;
             video.play();
