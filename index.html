@@ -1,63 +1,113 @@
-<script>
-    var hls = null; // Variável global para controlar o fluxo
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Léo Programador - Uberlândia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        :root { --neon-blue: #00e0ff; --neon-pink: #ff00e0; --bg-dark: #00050a; }
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(rgba(0, 224, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 224, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .panel {
+            background: rgba(0, 10, 20, 0.95);
+            border: 2px solid var(--neon-blue);
+            border-radius: 20px;
+            padding: 25px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 224, 255, 0.4);
+        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .full-width { grid-column: 1 / -1; }
+        button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        button:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
+        #menu-canais { display: none; margin-bottom: 15px; border: 1px dashed var(--neon-pink); padding: 10px; border-radius: 10px; }
+        #video-container { display: none; margin: 15px 0; border: 2px solid var(--neon-pink); border-radius: 10px; overflow: hidden; background: #000; }
+        video { width: 100%; display: block; }
+        .footer { margin-top: 20px; font-size: 0.6rem; opacity: 0.6; }
+    </style>
+</head>
+<body>
 
-    function toggleCanais() {
-        var menu = document.getElementById('menu-canais');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+<div class="panel">
+    <h1 style="margin:0; font-size:1.5rem; color:var(--neon-blue);">LÉO PROGRAMADOR</h1>
+    <div style="font-size:0.6rem; letter-spacing:2px; margin-bottom:20px;">UBERLÂNDIA-MG</div>
+    
+    <div class="grid">
+        <button class="full-width" onclick="toggleMenu()">📺 CANAIS AO VIVO (ABRIR)</button>
+        
+        <div id="menu-canais" class="full-width">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="playSinal('https://stmv1.srvif.com/anime/anime/playlist.m3u8')">🏮 ANIMES</button>
+                <button onclick="alert('Em breve')">⚽ DESPORTOS</button>
+            </div>
+        </div>
+
+        <div id="video-container" class="full-width">
+            <video id="meuVideo" controls playsinline></video>
+        </div>
+
+        <button onclick="alert('Privado')">🎬 FILMES</button>
+        <button onclick="alert('Privado')">🍿 SÉRIES</button>
+        <button class="full-width" style="border-color:var(--neon-pink);">SINAL 02: ESTABILIZADO</button>
+    </div>
+
+    <div class="footer">BACKUP 30S | LÉO KASAMA SYSTEM</div>
+</div>
+
+<script>
+    var hls = null;
+
+    function toggleMenu() {
+        var m = document.getElementById('menu-canais');
+        m.style.display = (m.style.display === 'block') ? 'none' : 'block';
     }
 
-    function playM3U8(url, nome) {
-        var video = document.getElementById('video');
+    function playSinal(url) {
+        var video = document.getElementById('meuVideo');
         var container = document.getElementById('video-container');
-        
-        // Exibe o container e prepara o vídeo
         container.style.display = 'block';
-        video.muted = true; // Ajuda o navegador a permitir o autoplay
-        
-        console.log("Sintonizando: " + nome);
 
-        // Se já existir um sinal rodando, a gente destrói ele para não travar
-        if (hls) {
-            hls.destroy();
-        }
+        if (hls) { hls.destroy(); }
 
         if (Hls.isSupported()) {
-            hls = new Hls({
-                capLevelToPlayerSize: true,
-                lowLatencyMode: true,
-            });
+            hls = new Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                // Tenta dar o play e se falhar, remove o mudo para o usuário clicar
-                video.play().catch(function() {
-                    video.muted = false;
-                    video.controls = true;
-                });
+                video.play().catch(() => { video.controls = true; });
             });
-
-            // Tratamento de erro de rede (comum em IPTV)
-            hls.on(Hls.Events.ERROR, function (event, data) {
-                if (data.fatal) {
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        hls.startLoad();
-                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                        hls.recoverMediaError();
-                    }
-                }
-            });
-
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // Suporte Nativo (Safari/iOS)
             video.src = url;
-            video.addEventListener('loadedmetadata', function() {
-                video.play();
-            });
+            video.play();
         }
-
-        // Scroll suave para o vídeo
-        setTimeout(() => {
-            container.scrollIntoView({ behavior: 'smooth' });
-        }, 300);
+        container.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
+
+</body>
+</html>
