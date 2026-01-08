@@ -3,126 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Léo Programador - Uberlândia</title>
+    <title>Léo Programador - VLC System</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root { --neon-blue: #00e0ff; --neon-pink: #ff00e0; --neon-yellow: #f0ff00; --bg-dark: #00050a; }
         body {
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            background-color: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0;
             background-image: linear-gradient(rgba(0, 224, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 224, 255, 0.1) 1px, transparent 1px);
             background-size: 30px 30px;
         }
         .panel {
-            background: rgba(0, 10, 20, 0.95);
-            border: 2px solid var(--neon-blue);
-            border-radius: 20px;
-            padding: 25px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(0, 224, 255, 0.4);
+            background: rgba(0, 10, 20, 0.95); border: 2px solid var(--neon-blue); border-radius: 20px;
+            padding: 25px; width: 95%; max-width: 600px; text-align: center; box-shadow: 0 0 30px rgba(0, 224, 255, 0.4);
         }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
         .full-width { grid-column: 1 / -1; }
         
+        /* Estilo VLC Player */
+        #vlc-container {
+            display: none; margin: 20px 0; border: 3px solid #fff; border-radius: 10px;
+            background: #000; overflow: hidden; box-shadow: 0 0 25px var(--neon-blue);
+        }
+        video { width: 100%; aspect-ratio: 16/9; display: block; background: #000; }
+        
+        .vlc-controls {
+            background: #333; padding: 10px; display: flex; justify-content: space-around;
+            border-top: 1px solid #555; font-size: 0.6rem;
+        }
+
         .api-input {
             width: 100%; background: rgba(0, 0, 0, 0.6); border: 1px solid var(--neon-pink);
             color: var(--neon-blue); padding: 10px; border-radius: 8px;
             font-family: 'Orbitron', sans-serif; font-size: 0.7rem; margin-bottom: 8px; text-align: center;
-            box-sizing: border-box;
         }
 
         button {
             background: rgba(255, 255, 255, 0.05); border: 1px solid var(--neon-blue);
             color: white; padding: 12px 5px; border-radius: 10px; cursor: pointer;
-            font-family: 'Orbitron', sans-serif; font-size: 0.65rem; text-transform: uppercase; transition: 0.3s;
+            font-family: 'Orbitron', sans-serif; font-size: 0.6rem; text-transform: uppercase; transition: 0.3s;
         }
-        button:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
-        
-        /* Botões de Injeção Separados */
-        .btn-api { border-color: var(--neon-yellow); color: var(--neon-yellow); }
-        .btn-m3u { border-color: #00ff88; color: #00ff88; }
+        button:hover { background: var(--neon-blue); color: black; }
+        .btn-active { border-color: var(--neon-yellow); color: var(--neon-yellow); }
 
-        #menu-canais { display: none; margin: 10px 0; padding: 10px; border: 1px dashed var(--neon-pink); border-radius: 10px; background: rgba(255, 0, 224, 0.05); }
-        #video-container { display: none; margin: 15px 0; border: 2px solid var(--neon-pink); border-radius: 10px; background: #000; box-shadow: 0 0 20px var(--neon-pink); }
-        video { width: 100%; display: block; }
-        
-        .footer { margin-top: 20px; font-size: 0.55rem; opacity: 0.6; }
+        #category-tag {
+            background: var(--neon-pink); color: white; padding: 2px 10px;
+            border-radius: 20px; font-size: 0.5rem; margin-bottom: 10px; display: inline-block;
+        }
     </style>
 </head>
 <body>
 
 <div class="panel">
-    <h1>LÉO PROGRAMADOR</h1>
-    <div style="font-size:0.6rem; letter-spacing:2px; margin-bottom:15px;">UBERLÂNDIA-MG | CENTRAL DE COMANDO</div>
-    
-    <div style="margin-bottom: 15px;">
-        <input type="password" id="api-key" class="api-input" placeholder="DIGITE API KEY">
-        <button class="full-width btn-api" onclick="injetar('API')">⚡ INJETAR CHAVE API</button>
-        
-        <div style="height: 10px;"></div>
-        
-        <input type="text" id="m3u-url" class="api-input" style="border-color: #00ff88;" placeholder="URL DA LISTA M3U">
-        <button class="full-width btn-m3u" onclick="injetar('M3U')">🔗 INJETAR LISTA M3U</button>
-    </div>
+    <h1>LÉO VLC SYSTEM</h1>
+    <div style="font-size:0.6rem; letter-spacing:2px; margin-bottom:15px;">UBERLÂNDIA-MG | PLAYER MULTI-CATEGORIA</div>
 
+    <input type="password" id="api-key" class="api-input" placeholder="KEY API (XTREAM)">
+    <input type="text" id="m3u-url" class="api-input" style="border-color: #00ff88;" placeholder="URL LISTA M3U">
+    
     <div class="grid">
-        <button class="full-width" onclick="toggleMenu('menu-canais')">📺 ABRIR MENU DE CANAIS</button>
+        <button class="btn-active" onclick="injetar('API')">⚡ INJETAR API</button>
+        <button style="border-color: #00ff88; color: #00ff88;" onclick="injetar('M3U')">🔗 INJETAR M3U</button>
         
-        <div id="menu-canais" class="full-width">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <button style="color:var(--neon-pink); border-color:var(--neon-pink);" onclick="playM3U8('https://stmv1.srvif.com/anime/anime/playlist.m3u8', 'ANIMES')">🏮 ANIMES</button>
-                <button style="color:var(--neon-yellow); border-color:var(--neon-yellow);" onclick="alert('Sinal Globo...')">💎 GLOBO</button>
-                <button style="color:var(--neon-yellow); border-color:var(--neon-yellow);" onclick="alert('Sinal SBT...')">🔵 SBT</button>
-                <button style="color:var(--neon-yellow); border-color:var(--neon-yellow);" onclick="alert('Sinal Record...')">🔴 RECORD</button>
+        <div id="vlc-container" class="full-width">
+            <div id="category-tag">SINTONIZANDO...</div>
+            <video id="vlc-video" controls playsinline></video>
+            <div class="vlc-controls">
+                <span>HD 1080P</span>
+                <span>STATUS: OPERACIONAL</span>
+                <span>UBERLÂNDIA SINAL 01</span>
             </div>
         </div>
 
-        <div id="video-container" class="full-width">
-            <video id="video" controls playsinline></video>
-        </div>
-
-        <button onclick="alert('Filmes...')">🎬 FILMES</button>
-        <button onclick="alert('Séries...')">🍿 SÉRIES</button>
-        <button class="full-width" style="border-color:var(--neon-pink);">SINAL 02: ESTABILIZADO</button>
+        <button onclick="vlcPlay('https://stmv1.srvif.com/anime/anime/playlist.m3u8', 'ANIME')">🏮 ANIMES</button>
+        <button onclick="alert('Carregando Filmes da API...')">🎬 FILMES</button>
+        <button onclick="alert('Carregando Séries da API...')">🍿 SÉRIES</button>
+        <button onclick="vlcPlay('URL_AQUI', 'TV ABERTA')">💎 TV ABERTA</button>
+        
+        <button class="full-width" style="border-color:var(--neon-pink);" onclick="toggleMenu()">📺 ABRIR MENU COMPLETO</button>
     </div>
 
-    <div class="footer">
-        BACKUP 30S ATIVO | LÉO KASAMA SYSTEM | UBERLÂNDIA 2026
+    <div class="footer" style="margin-top: 20px; font-size: 0.5rem; opacity: 0.5;">
+        VLC ENGINE BY LÉO KASAMA | BACKUP 30S | 2026
     </div>
 </div>
 
 <script>
     var hls = null;
 
-    function toggleMenu(id) {
-        var menu = document.getElementById(id);
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-
     function injetar(tipo) {
-        if(tipo === 'API') {
-            const key = document.getElementById('api-key').value;
-            alert(key ? "API Key " + key + " Injetada com Sucesso!" : "Insira a Key!");
-        } else {
-            const url = document.getElementById('m3u-url').value;
-            alert(url ? "Lista M3U Sincronizada!" : "Insira a URL da Lista!");
-        }
+        alert(tipo + " Injetada! O motor VLC está processando as categorias...");
     }
 
-    function playM3U8(url, nome) {
-        var video = document.getElementById('video');
-        var container = document.getElementById('video-container');
+    function vlcPlay(url, categoria) {
+        const video = document.getElementById('vlc-video');
+        const container = document.getElementById('vlc-container');
+        const tag = document.getElementById('category-tag');
+        
         container.style.display = 'block';
+        tag.innerText = "EXECUTANDO: " + categoria;
+
         if (hls) { hls.destroy(); }
+
         if (Hls.isSupported()) {
             hls = new Hls();
             hls.loadSource(url);
@@ -134,7 +117,12 @@
             video.src = url;
             video.play();
         }
+        
         container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleMenu() {
+        alert("Menu lateral de categorias estilo VLC em desenvolvimento...");
     }
 </script>
 
