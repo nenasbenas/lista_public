@@ -1,29 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Acesso</title>
-    <style>
-        body { background-color: #050505; color: #00ff00; font-family: 'Courier New', monospace; text-align: center; padding: 40px 20px; }
-        .box { border: 1px solid #111; padding: 25px; border-radius: 10px; display: inline-block; background: #0a0a0a; }
-        .btn-ghost { display: block; background: #111; color: #00ff00; border: 1px solid #00ff00; padding: 15px; 
-                     text-decoration: none; margin: 15px 0; font-weight: bold; border-radius: 5px; font-size: 16px; }
-        .btn-ghost:hover { background: #00ff00; color: #000; }
-        .status { font-size: 10px; color: #222; margin-top: 30px; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h3>ACESSO PRIVADO</h3>
-        <p style="color: #888; font-size: 13px;">Selecione o sinal de entrada:</p>
+<div class="container">
+    <h2>PAINEL DE MÍDIA - ACESSO PRIVADO</h2>
+    
+    <div class="grid-opcoes">
+        <button class="btn-primary" onclick="executarSinal('TV_AO_VIVO')">📺 TV AO VIVO</button>
+        <button class="btn-primary" onclick="executarSinal('FILMES')">🎬 FILMES</button>
+        <button class="btn-primary" onclick="executarSinal('SERIES')">🍿 SÉRIES</button>
         
-        <a href="https://raw.githubusercontent.com/nenasbenas/lista_public/main/player_completo.m3u" class="btn-ghost">EXECUTAR SINAL 01</a>
-        <a href="https://raw.githubusercontent.com/nenasbenas/lista_public/main/canais_sd.m3u" class="btn-ghost">EXECUTAR SINAL 02 (ESTÁVEL)</a>
+        <button class="btn-secondary" onclick="executarSinal('01')">EXECUTAR SINAL 01</button>
+        <button class="btn-stable" onclick="executarSinal('02')">SINAL 02 (ESTÁVEL)</button>
     </div>
 
-    <div class="status">
-        ENCRYPTED | BACKUP SAVED [cite: 2026-01-05]
+    <div class="footer">
+        <p>STATUS: ENCRYPTED | BACKUP: ATIVO (Sincronizado 30s)</p>
     </div>
-</body>
-</html>
+</div>
