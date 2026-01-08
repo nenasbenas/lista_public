@@ -9,6 +9,7 @@
         :root {
             --neon-blue: #00e0ff;
             --neon-pink: #ff00e0;
+            --neon-yellow: #f0ff00;
             --bg-dark: #00050a;
         }
 
@@ -34,7 +35,7 @@
             border-radius: 20px;
             padding: 30px;
             width: 90%;
-            max-width: 450px;
+            max-width: 480px;
             text-align: center;
             box-shadow: 0 0 30px rgba(0, 224, 255, 0.4);
             position: relative;
@@ -44,4 +45,147 @@
         h1 {
             font-size: 1.8rem;
             margin: 0;
-            background: linear-gradient(to right, #fff, var(--neon-blue), var(--neon
+            background: linear-gradient(to right, #fff, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .location {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--neon-blue);
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 15px 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* Menu de Categorias Expandido */
+        #menu-canais {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            border: 1px dashed var(--neon-pink);
+            background: rgba(255, 0, 224, 0.05);
+            border-radius: 10px;
+            grid-column: 1 / -1;
+        }
+
+        .sub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-categoria {
+            font-size: 0.6rem;
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 10px 2px;
+        }
+
+        .btn-tv-aberta {
+            border-color: var(--neon-yellow);
+            color: var(--neon-yellow);
+        }
+
+        .btn-special {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 0.6rem;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .status-dot {
+            height: 6px;
+            width: 6px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <h1>LÉO PROGRAMADOR</h1>
+    <div class="location">UBERLÂNDIA-MG | TERRAÇO ANDRÔMEDA</div>
+    
+    <div class="grid">
+        <button class="full-width" onclick="toggleCanais()" style="border-width: 2px; border-color: #fff;">📺 CANAIS AO VIVO (MENU EXPANSIVO)</button>
+        
+        <div id="menu-canais">
+            <p style="font-size: 0.5rem; color: var(--neon-pink); margin-bottom: 10px;">SELECIONE O FLUXO DE SINAL:</p>
+            <div class="sub-grid">
+                <button class="btn-categoria" onclick="acao('ANIMES')">🏮 ANIMES</button>
+                <button class="btn-categoria" onclick="acao('DESPORTOS')">⚽ DESPORTOS</button>
+                <button class="btn-categoria btn-tv-aberta" onclick="acao('GLOBO')">💎 GLOBO</button>
+                <button class="btn-categoria btn-tv-aberta" onclick="acao('SBT')">🔵 SBT</button>
+                <button class="btn-categoria btn-tv-aberta" onclick="acao('RECORD')">🔴 RECORD</button>
+                <button class="btn-categoria" onclick="acao('CINEMA')">🎬 CINEMA</button>
+            </div>
+        </div>
+
+        <button onclick="acao('FILMES PRIVADOS')">🎬 FILMES</button>
+        <button onclick="acao('SÉRIES DIMENSIONAIS')">🍿 SÉRIES</button>
+        
+        <div class="full-width" style="height: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
+        
+        <button class="full-width" onclick="acao('SINAL 01')">SINAL 01: OPERACIONAL</button>
+        <button class="full-width btn-special" onclick="acao('SINAL 02')">SINAL 02: ESTABILIZADO</button>
+    </div>
+
+    <div class="footer">
+        <span class="status-dot"></span> BACKUP 30S ATIVO | LÉO KASAMA SYSTEM | 2026
+    </div>
+</div>
+
+<script>
+    function toggleCanais() {
+        const menu = document.getElementById('menu-canais');
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function acao(tipo) {
+        console.log("Comando Léo Kasama: " + tipo);
+        alert("Léo Programador de Uberlândia acessando: " + tipo + "\nSinal Criptografado.");
+    }
+</script>
+
+</body>
+</html>
