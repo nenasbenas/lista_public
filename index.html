@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Léo Kasama - Injetor Único GitHub</title>
+    <title>Léo Kasama - Uberlândia VLC</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
@@ -20,106 +20,115 @@
             box-shadow: 0 0 25px rgba(0, 224, 255, 0.3);
         }
         
-        /* PLAYER DARK - SEM BARRA BRANCA */
+        /* PLAYER DARK - BARRA BRANCA REMOVIDA */
         #vlc-frame {
             width: 100%; border-radius: 12px; background: #000; overflow: hidden;
             position: relative; border: 1px solid var(--neon-blue); margin: 15px 0;
         }
         video { width: 100%; aspect-ratio: 16/9; display: block; outline: none; background: #000; }
-        video::-webkit-media-controls-panel { background-color: #000; }
+        
+        /* CSS para ocultar barras ovais brancas do sistema */
+        video::-webkit-media-controls-panel { background-color: #000 !important; }
+        video::-webkit-media-controls-enclosure { background-color: rgba(0,0,0,0.8) !important; }
 
         .api-input {
             width: 100%; background: #000; border: 1px solid var(--neon-pink);
             color: var(--neon-blue); padding: 12px; border-radius: 8px;
             font-family: 'Orbitron', sans-serif; font-size: 0.7rem; margin-bottom: 8px; text-align: center;
         }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .full { grid-column: 1 / -1; }
-
-        /* BOTÃO ÚNICO DE INJEÇÃO */
         .btn-inject {
             background: rgba(240, 255, 0, 0.1); border: 2px solid var(--neon-yellow);
             color: var(--neon-yellow); padding: 15px; border-radius: 10px; cursor: pointer;
             font-family: 'Orbitron', sans-serif; font-size: 0.7rem; text-transform: uppercase;
-            width: 100%; font-weight: bold; transition: 0.3s; margin-bottom: 10px;
+            width: 100%; font-weight: bold; margin-bottom: 10px; transition: 0.3s;
         }
         .btn-inject:hover { background: var(--neon-yellow); color: #000; box-shadow: 0 0 20px var(--neon-yellow); }
-
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .full { grid-column: 1 / -1; }
         button {
             background: rgba(0, 224, 255, 0.05); border: 1px solid var(--neon-blue);
             color: white; padding: 12px; border-radius: 10px; cursor: pointer;
-            font-family: 'Orbitron', sans-serif; font-size: 0.65rem; text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; font-size: 0.6rem; text-transform: uppercase;
         }
-
         #status-msg { font-size: 0.55rem; color: #00ff88; margin-bottom: 10px; height: 15px; }
     </style>
 </head>
 <body>
 
 <div class="panel">
-    <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 15px;">LÉO KASAMA | INJETOR MESTRE GITHUB</div>
+    <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 15px;">LÉO KASAMA | UBERLÂNDIA-MG | GITHUB AUTO-SAVE</div>
 
-    <input type="text" id="url-api" class="api-input" placeholder="DIGITE A URL / DNS (M3U)">
-    <input type="password" id="key-api" class="api-input" style="border-color: #00ff88;" placeholder="DIGITE SUA KEY API">
+    <input type="text" id="url-api" class="api-input" placeholder="URL / DNS DO SERVIDOR">
+    <input type="password" id="key-api" class="api-input" style="border-color: #00ff88;" placeholder="SUA KEY / TOKEN API">
 
-    <button class="btn-inject" onclick="injetarTudoGitHub()">⚡ INJETAR DADOS NO GITHUB</button>
+    <button class="btn-inject" onclick="salvarNoGithub()">⚡ INJETAR E SALVAR NO GITHUB</button>
 
-    <div id="status-msg">AGUARDANDO COMANDO...</div>
+    <div id="status-msg">SISTEMA PRONTO PARA SINCRONIZAR...</div>
 
     <div class="grid">
         <div id="vlc-frame" class="full">
             <video id="leo-player" controls playsinline></video>
         </div>
-
         <button id="btn-animes" onclick="playSinal('https://stmv1.srvif.com/anime/anime/playlist.m3u8')">🏮 ANIMES</button>
-        <button onclick="alert('Filtrando Filmes da Lista...')">🎬 FILMES</button>
-        <button onclick="alert('Filtrando Séries da Lista...')">🍿 SÉRIES</button>
-        <button id="btn-tv" onclick="alert('Filtrando Canais...')">💎 TV ABERTA</button>
-        
+        <button onclick="alert('Filtrando Filmes...')">🎬 FILMES</button>
+        <button onclick="alert('Filtrando Séries...')">🍿 SÉRIES</button>
+        <button id="btn-tv" onclick="alert('Filtrando TV...')">💎 TV ABERTA</button>
         <button class="full" style="border-color: var(--neon-pink); color: var(--neon-pink);">📺 ABRIR LISTA COMPLETA</button>
     </div>
-
-    <div style="font-size: 0.5rem; margin-top: 15px; opacity: 0.5;">
-        VLC ENGINE BY LÉO KASAMA | BACKUP 30S | nenasbenas.github.io
-    </div>
+    <div style="font-size: 0.5rem; margin-top: 15px; opacity: 0.5;">VLC ENGINE | BACKUP 30S | nenasbenas.github.io</div>
 </div>
 
 <script>
     var hls = null;
-    const video = document.getElementById('leo-player');
-    const status = document.getElementById('status-msg');
+    const G_TOKEN = "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"; // Chave Injetada
+    const G_REPO = "nenasbenas/nenasbenas.github.io";
+    const G_FILE = "player_completo.m3u";
 
-    async function injetarTudoGitHub() {
+    async function salvarNoGithub() {
         const url = document.getElementById('url-api').value;
         const key = document.getElementById('key-api').value;
+        const status = document.getElementById('status-msg');
 
-        if(!url || !key) {
-            alert("Léo, preencha a URL e a Key!");
-            return;
+        if(!url || !key) return alert("Léo, preencha os dados!");
+
+        status.innerText = "🚀 ATUALIZANDO GITHUB...";
+
+        const m3uContent = `#EXTM3U\n#EXTINF:-1, Canal Gerado\n${url}/get.php?username=USER&password=${key}&type=m3u_plus`;
+        const base64Content = btoa(unescape(encodeURIComponent(m3uContent)));
+
+        try {
+            const getFile = await fetch(`https://api.github.com/repos/${G_REPO}/contents/${G_FILE}`, {
+                headers: { "Authorization": `token ${G_TOKEN}` }
+            });
+            const fileData = await getFile.json();
+            
+            const updateFile = await fetch(`https://api.github.com/repos/${G_REPO}/contents/${G_FILE}`, {
+                method: "PUT",
+                headers: { "Authorization": `token ${G_TOKEN}`, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: "Auto-Update via Painel Léo",
+                    content: base64Content,
+                    sha: fileData.sha
+                })
+            });
+
+            if(updateFile.ok) {
+                status.innerText = "✅ GITHUB ATUALIZADO COM SUCESSO!";
+                alert("Sincronização concluída no player_completo.m3u!");
+            }
+        } catch (e) {
+            status.innerText = "❌ ERRO NA SINCRONIZAÇÃO.";
         }
-
-        status.innerText = "PROCESSANDO E ENVIANDO PARA GITHUB...";
-
-        // AQUI O SISTEMA UNE OS DOIS DADOS PARA O SEU ARQUIVO player_completo.m3u
-        setTimeout(() => {
-            status.innerHTML = "✅ SINCROZINADO: player_completo.m3u ATUALIZADO!";
-            // Ativa o reconhecimento visual nos botões
-            document.getElementById('btn-animes').style.borderColor = "#00ff88";
-            alert("Dados injetados com sucesso no seu repositório!");
-        }, 1500);
     }
 
     function playSinal(url) {
+        const video = document.getElementById('leo-player');
         if (hls) { hls.destroy(); }
         if (Hls.isSupported()) {
-            hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(video);
+            hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
         }
     }
 </script>
-
 </body>
 </html>
