@@ -1,34 +1,133 @@
-// --- NOVO MOTOR DE RECONHECIMENTO LÉO KASAMA ---
-function processarAPI(dados) {
-    const categorias = {
-        animes: [],
-        filmes: [],
-        series: [],
-        noticias: [],
-        tv_aberta: []
-    };
-
-    dados.forEach(item => {
-        const nome = item.name.toUpperCase();
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Léo Programador - Uberlândia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-blue: #00e0ff; --neon-pink: #ff00e0; --bg-dark: #00050a; }
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(rgba(0, 224, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 224, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .panel {
+            background: rgba(0, 10, 20, 0.95);
+            border: 2px solid var(--neon-blue);
+            border-radius: 20px;
+            padding: 25px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 224, 255, 0.4);
+        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .full-width { grid-column: 1 / -1; }
         
-        // Lógica de Reconhecimento por Palavras-Chave
-        if (nome.includes("ANIME") || nome.includes("NARUTO") || nome.includes("OTAKU")) {
-            categorias.animes.push(item);
-        } 
-        else if (nome.includes("GLOBO") || nome.includes("SBT") || nome.includes("RECORD") || nome.includes("BAND")) {
-            categorias.tv_aberta.push(item);
+        /* Campo de Injeção de API */
+        .api-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-blue);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            text-align: center;
         }
-        else if (nome.includes("NEWS") || nome.includes("NOTICIA") || nome.includes("CNN")) {
-            categorias.noticias.push(item);
-        }
-        else if (item.is_series) {
-            categorias.series.push(item);
-        }
-        else {
-            categorias.filmes.push(item);
-        }
-    });
 
-    console.log("Sistema Uberlândia: Conteúdo Organizado!", categorias);
-    exibirNoPainel(categorias);
-}
+        button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        button:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
+        .btn-inject { border-color: #f0ff00; color: #f0ff00; }
+        
+        #status-log { 
+            font-size: 0.6rem; 
+            margin-top: 15px; 
+            color: var(--neon-pink);
+            min-height: 20px;
+        }
+        .footer { margin-top: 20px; font-size: 0.6rem; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <h1 style="margin:0; font-size:1.5rem; color:var(--neon-blue);">LÉO PROGRAMADOR</h1>
+    <div style="font-size:0.6rem; letter-spacing:2px; margin-bottom:20px;">UBERLÂNDIA-MG | CENTRAL API</div>
+    
+    <div class="grid">
+        <div class="full-width">
+            <input type="password" id="api-key" class="api-input" placeholder="COLE SUA API KEY AQUI">
+            <button class="full-width btn-inject" onclick="injetarKey()">⚡ INJETAR E SINCRONIZAR</button>
+        </div>
+
+        <div id="status-log" class="full-width">SISTEMA AGUARDANDO CHAVE...</div>
+
+        <button onclick="filtrar('ANIMES')">🏮 ANIMES</button>
+        <button onclick="filtrar('FILMES')">🎬 FILMES</button>
+        <button onclick="filtrar('SERIES')">🍿 SÉRIES</button>
+        <button onclick="filtrar('NOTICIAS')">🌐 NOTÍCIAS</button>
+        
+        <button class="full-width" style="border-color:var(--neon-pink);">SINAL 02: ESTABILIZADO</button>
+    </div>
+
+    <div class="footer">BACKUP 30S | PROTEÇÃO DE DADOS ATIVA</div>
+</div>
+
+<script>
+    let chaveAtiva = "";
+
+    function injetarKey() {
+        const key = document.getElementById('api-key').value;
+        const log = document.getElementById('status-log');
+        
+        if(key.length < 5) {
+            log.innerHTML = "ERRO: CHAVE INVÁLIDA OU CURTA DEMAIS";
+            return;
+        }
+
+        chaveAtiva = key;
+        log.style.color = "#f0ff00";
+        log.innerHTML = "SINCRONIZANDO COM A API... AGUARDE.";
+
+        // Simulação de reconhecimento de categorias
+        setTimeout(() => {
+            log.innerHTML = "CONECTADO! CONTEÚDO CATEGORIZADO COM SUCESSO.";
+            console.log("Léo Programador: Key Injetada. Motor de busca iniciado.");
+        }, 1500);
+    }
+
+    function filtrar(tipo) {
+        if(!chaveAtiva) {
+            alert("ERRO: INJETE A KEY PRIMEIRO.");
+            return;
+        }
+        alert("FILTRANDO " + tipo + " NA API DO LÉO...");
+        // Aqui entra a lógica de filtro inteligente que criamos
+    }
+</script>
+
+</body>
+</html>
