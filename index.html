@@ -1,16 +1,49 @@
-<div class="container">
-    <h2>PAINEL DE MÍDIA - ACESSO PRIVADO</h2>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrômeda - Acesso Privado</title>
+    <style>
+        body { background-color: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .panel { border: 2px solid #00ff41; padding: 20px; background: #1a1a1a; box-shadow: 0 0 15px #00ff41; width: 90%; max-width: 500px; text-align: center; }
+        h2 { font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        button { background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; text-transform: uppercase; }
+        button:hover { background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; }
+        .footer { margin-top: 20px; font-size: 0.7rem; color: #666; }
+        .status-blink { animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <h2><span class="status-blink">●</span> TERRAÇO ANDRÔMEDA - PRIVADO</h2>
     
-    <div class="grid-opcoes">
-        <button class="btn-primary" onclick="executarSinal('TV_AO_VIVO')">📺 TV AO VIVO</button>
-        <button class="btn-primary" onclick="executarSinal('FILMES')">🎬 FILMES</button>
-        <button class="btn-primary" onclick="executarSinal('SERIES')">🍿 SÉRIES</button>
+    <div class="grid">
+        <button onclick="executar('TV_LIVE')">📺 TV AO VIVO</button>
+        <button onclick="executar('FILMES')">🎬 FILMES</button>
+        <button onclick="executar('SERIES')">🍿 SÉRIES</button>
         
-        <button class="btn-secondary" onclick="executarSinal('01')">EXECUTAR SINAL 01</button>
-        <button class="btn-stable" onclick="executarSinal('02')">SINAL 02 (ESTÁVEL)</button>
+        <hr style="border: 0.5px solid #333; width: 100%;">
+        
+        <button onclick="executar('SINAL_01')">EXECUTAR SINAL 01</button>
+        <button onclick="executar('SINAL_02_ESTAVEL')">SINAL 02 (ESTÁVEL)</button>
     </div>
 
     <div class="footer">
-        <p>STATUS: ENCRYPTED | BACKUP: ATIVO (Sincronizado 30s)</p>
+        STATUS: ENCRYPTED | BACKUP: ATIVO (30s) | LIBERDADE NIVEL: MÁXIMO
     </div>
 </div>
+
+<script>
+    function executar(tipo) {
+        console.log("Iniciando protocolo: " + tipo);
+        alert("Acessando " + tipo + " em Andrômeda... Backup sincronizado.");
+        // Aqui você pode inserir os links ou as rotas de cada categoria
+    }
+</script>
+
+</body>
+</html>
