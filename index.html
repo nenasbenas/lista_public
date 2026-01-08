@@ -3,107 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Léo Programador - Andrômeda OS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Léo Programador - Uberlândia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-blue: #00e0ff;
-            --neon-magenta: #ff00e0;
-            --grid-line-color: rgba(0, 224, 255, 0.1);
-            --bg-color: #000a12;
-            --panel-border: rgba(0, 224, 255, 0.5);
+            --neon-pink: #ff00e0;
+            --bg-dark: #00050a;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: #fff;
-            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
-            position: relative;
-        }
-
-        /* Fundo com grid futurista */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
-            background-size: 20px 20px;
-            opacity: 0.3;
-            z-index: 0;
-            animation: bgScan 60s linear infinite;
-        }
-
-        @keyframes bgScan {
-            from { background-position: 0 0; }
-            to { background-position: 2000px 2000px; }
+            /* Efeito de fundo com grade */
+            background-image: 
+                linear-gradient(rgba(0, 224, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 224, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
         .panel {
-            position: relative;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--panel-border);
-            border-radius: 25px;
-            padding: 40px;
+            background: rgba(0, 10, 20, 0.9);
+            border: 2px solid var(--neon-blue);
+            border-radius: 20px;
+            padding: 30px;
             width: 90%;
-            max-width: 500px;
+            max-width: 450px;
             text-align: center;
-            box-shadow: 0 0 50px var(--neon-blue), inset 0 0 20px var(--neon-blue);
-            z-index: 1;
-            transition: all 0.3s ease-in-out;
-            /* Efeito de holograma */
-            animation: holoPanel 10s infinite alternate;
+            box-shadow: 0 0 30px rgba(0, 224, 255, 0.4);
+            position: relative;
+            z-index: 10;
         }
 
-        @keyframes holoPanel {
-            0% { transform: scale(1) translateY(0); opacity: 1; }
-            50% { transform: scale(1.005) translateY(-2px); opacity: 0.98; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin-bottom: 5px;
-            background: linear-gradient(to right, var(--neon-blue), var(--neon-magenta));
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--neon-blue), var(--neon-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--neon-blue), 0 0 15px var(--neon-magenta);
         }
 
-        .subtitle {
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
+        .location {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
             color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--neon-blue);
-            font-weight: 700;
-            text-transform: uppercase;
-            opacity: 0.9;
+            margin-bottom: 25px;
+            font-weight: bold;
         }
 
-        .grid-container {
+        .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 20px;
         }
 
-        .grid-header {
+        .full-width {
             grid-column: 1 / -1;
-            text-align: left;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 15px 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.7rem;
-            color: rgba(255, 255, 255
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .btn-special {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        .btn-special:hover {
+            background: var(--neon-pink);
+            color: white;
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 0.6rem;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .status-dot {
+            height: 6px;
+            width: 6px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <h1>LÉO PROGRAMADOR</h1>
+    <div class="location">UBERLÂNDIA-MG | TERRAÇO ANDRÔMEDA</div>
+    
+    <div class="grid">
+        <button class="full-width" onclick="acao('TV AO VIVO')">📺 CANAIS AO VIVO</button>
+        <button onclick="acao('FILMES')">🎬 FILMES</button>
+        <button onclick="acao('SÉRIES')">🍿 SÉRIES</button>
+        
+        <div class="full-width" style="height: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
+        
+        <button class="full-width" onclick="acao('PROTOCOLO 01')">SINAL 01: OPERACIONAL</button>
+        <button class="full-width btn-special" onclick="acao('SINAL 02')">SINAL 02: ESTABILIZADO</button>
+    </div>
+
+    <div class="footer">
+        <span class="status-dot"></span> SISTEMA HOLOGRÁFICO ATIVO | BACKUP 30S
+    </div>
+</div>
+
+<script>
+    function acao(tipo) {
+        console.log("Comando recebido: " + tipo);
+        alert("Léo Programador, acessando: " + tipo);
+    }
+</script>
+
+</body>
+</html>
