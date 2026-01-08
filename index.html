@@ -1,19 +1,109 @@
-<div class="panel">
-    <h2 style="font-size: 1.5rem; line-height: 1.2;">LÉO PROGRAMADOR<br><span style="font-size: 1.2rem; opacity: 0.8;">DE UBERLÂNDIA</span></h2>
-    <div class="subtitle" style="margin-top: 10px;">Terraço Andrômeda</div>
-    
-    <div class="grid">
-        <button onclick="executar('TV')"><span>📺 TV AO VIVO</span> <span>❯</span></button>
-        <button onclick="executar('FILMES')"><span>🎬 FILMES PRIVADOS</span> <span>❯</span></button>
-        <button onclick="executar('SERIES')"><span>🍿 SÉRIES ORIGINAIS</span> <span>❯</span></button>
-        
-        <div style="margin: 10px 0; border-top: 1px solid rgba(255,255,255,0.05);"></div>
-        
-        <button onclick="executar('SINAL_01')" style="font-size: 0.75rem; opacity: 0.7;">SINAL 01</button>
-        <button onclick="executar('SINAL_02')" class="btn-stable">SINAL 02 (ESTÁVEL)</button>
-    </div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Léo Programador - Andrômeda OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00e0ff;
+            --neon-magenta: #ff00e0;
+            --grid-line-color: rgba(0, 224, 255, 0.1);
+            --bg-color: #000a12;
+            --panel-border: rgba(0, 224, 255, 0.5);
+        }
 
-    <div class="footer">
-        <span class="status-light"></span> SISTEMA CRIPTOGRAFADO | BACKUP 30S ATIVO | UBERLÂNDIA-MG
-    </div>
-</div>
+        body {
+            background-color: var(--bg-color);
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fundo com grid futurista */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: 0;
+            animation: bgScan 60s linear infinite;
+        }
+
+        @keyframes bgScan {
+            from { background-position: 0 0; }
+            to { background-position: 2000px 2000px; }
+        }
+
+        .panel {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--panel-border);
+            border-radius: 25px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 50px var(--neon-blue), inset 0 0 20px var(--neon-blue);
+            z-index: 1;
+            transition: all 0.3s ease-in-out;
+            /* Efeito de holograma */
+            animation: holoPanel 10s infinite alternate;
+        }
+
+        @keyframes holoPanel {
+            0% { transform: scale(1) translateY(0); opacity: 1; }
+            50% { transform: scale(1.005) translateY(-2px); opacity: 0.98; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--neon-blue), 0 0 15px var(--neon-magenta);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .grid-header {
+            grid-column: 1 / -1;
+            text-align: left;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255
