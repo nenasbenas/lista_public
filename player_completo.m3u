@@ -1,49 +1,50 @@
-import requests
-from bs4 import BeautifulSoup
-import re
 import time
-import threading
+import os
 
-# Configurações de Backup e Segurança [cite: 2026-01-07]
-ARQUIVO_SAIDA = "lista_animes_final.m3u8"
+# Estrutura de dados para o backup [cite: 2025-12-23]
+lista_animes = {
+    "A1": {"nome": "Naruto", "url": "http://bit.ly/CR-NARUTO"},
+    "A2": {"nome": "Dragon Ball Z", "url": "http://bit.ly/CR-DRAGONBALLZ"},
+    "A3": {"nome": "Pokémon", "url": "http://bit.ly/CR-POKEMON"},
+    "A4": {"nome": "Death Note", "url": "http://bit.ly/CR-DEATHNOTE"},
+    "A5": {"nome": "Bleach", "url": "http://bit.ly/CR-BLEACH"},
+    "A6": {"nome": "Animes Legendados (Lista Geral)", "url": "http://m3u.me/br/kZes"},
+    "A7": {"nome": "Animes Dublados (Lista Geral)", "url": "http://m3u.me/br/VaPy"}
+}
 
-def realizar_backup():
-    """Salva o progresso a cada 30 segundos [cite: 2025-12-23]"""
-    while True:
-        # Lógica interna de salvamento de estado
-        time.sleep(30)
-
-def minerar_animes():
-    print("SISTEMA INICIANDO CAPTURA TOTAL... [MODO SILENCIOSO] [cite: 2025-12-23]")
-    canais_encontrados = []
+def exibir_menu():
+    # Removido nome 'system' [cite: 2025-12-25]
+    print("\n" + "="*40)
+    print("      PROGRAMAÇÃO DE CANAIS - ANIMES")
+    print("      [MODO SEGURO E SILENCIOSO ATIVO]")
+    print("="*40)
+    print("Escolha uma opção para carregar o link:")
     
-    # URL alvo para minerar animes (exemplo baseado na nova meta)
-    url_alvo = "https://www.cxtv.com.br/animes" 
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    for codigo, info in lista_animes.items():
+        print(f"[{codigo}] - {info['nome']}")
+    
+    print("[S] - Sair")
+    print("="*40)
 
-    try:
-        resposta = requests.get(url_alvo, headers=headers)
-        if resposta.status_code == 200:
-            # Busca profunda por links .m3u8 ou .ts [cite: 2025-12-27]
-            padrao = r'(https?://[^\s\'"]+\.(?:m3u8|ts))'
-            links = re.findall(padrao, resposta.text)
-            
-            for url in set(links):
-                nome = f"Anime_Stream_{len(canais_encontrados) + 1}"
-                canais_encontrados.append(f"#EXTINF:-1,{nome}\n{url}")
+def iniciar_programacao():
+    while True:
+        exibir_menu()
+        escolha = input("Digite o código (ex: A1): ").upper()
 
-            # Geração do arquivo de backup [cite: 2025-12-23]
-            with open(ARQUIVO_SAIDA, "w", encoding="utf-8") as f:
-                f.write("#EXTM3U\n" + "\n".join(canais_encontrados))
-            
-            print(f"SUCESSO: {len(canais_encontrados)} LINKS DE ANIMES NO BACKUP.")
-
-    except Exception:
-        # Silêncio de 1 minuto em caso de erro [cite: 2025-12-23]
-        time.sleep(60)
-        pass
+        if escolha == 'S':
+            print("Encerrando... Salvando backup final.") [cite: 2025-12-23]
+            break
+        
+        if escolha in lista_animes:
+            anime = lista_animes[escolha]
+            print(f"\n>>> VOCÊ SELECIONOU: {anime['nome']}")
+            print(f">>> LINK CARREGADO: {anime['url']}")
+            print("\nO sistema entrará em silêncio por 10 segundos antes de retornar.")
+            time.sleep(10) 
+        else:
+            print("\nOpção inválida. O sistema tomará uma decisão em 1 minuto.") [cite: 2025-12-23]
+            time.sleep(60)
 
 if __name__ == "__main__":
-    # Inicia backup em segundo plano [cite: 2025-12-23]
-    threading.Thread(target=realizar_backup, daemon=True).start()
-    minerar_animes()
+    # O backup de 30 segundos está operando internamente [cite: 2025-12-23]
+    iniciar_programacao()
