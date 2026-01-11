@@ -1,50 +1,27 @@
-import time
-import os
-
-# 1. ESTA É A LISTA QUE FICARÁ DENTRO DO SEU CÓDIGO PYTHON [cite: 2025-12-27]
-opcoes_animes = {
-    "A1": {"nome": "Naruto Shippuden", "url": "http://bit.ly/CR-NARUTO"},
-    "A2": {"nome": "Dragon Ball Super", "url": "http://bit.ly/CR-DRAGONBALLZ"},
-    "A3": {"nome": "One Piece / Pokémon", "url": "http://bit.ly/CR-POKEMON"},
-    "A4": {"nome": "Lista de Animes Dublados", "url": "http://m3u.me/br/VaPy"},
-    "A5": {"nome": "Lista de Animes Legendados", "url": "http://m3u.me/br/kZes"}
-}
-
-def menu_cliente():
-    # Removendo nome 'system' conforme diretriz [cite: 2025-12-25]
-    print("\n" + "="*45)
-    print("      MENU DE OPÇÕES - PASTA ANIMES")
-    print("="*45)
-    print("Escolha o anime digitando o código abaixo:")
+<div id="categoria-animes" style="font-family: Arial, sans-serif; padding: 20px;">
+    <h2 style="color: #ff4500; border-bottom: 2px solid #ff4500;">OPÇÕES DE ANIMES</h2>
     
-    # Exibe as opções A1, A2, A3 para o cliente [cite: 2025-12-27]
-    for codigo, info in opcoes_animes.items():
-        print(f" > [{codigo}] - {info['nome']}")
-    
-    print(" > [S] - SAIR")
-    print("="*45)
-
-def iniciar():
-    while True:
-        menu_cliente()
-        escolha = input("CÓDIGO: ").upper()
-
-        if escolha == 'S':
-            print("Encerrando e salvando backup... [cite: 2025-12-23]")
-            break
-        
-        if escolha in opcoes_animes:
-            selecionado = opcoes_animes[escolha]
-            print(f"\n[OK] VOCÊ ESCOLHEU: {selecionado['nome']}")
-            print(f"[LINK] {selecionado['url']}")
-            # Respeitando o silêncio de 10 segundos configurado [cite: 2025-12-23]
-            print("Retornando ao menu em breve...")
-            time.sleep(10)
-        else:
-            # Erro de digitação gera silêncio de 1 minuto [cite: 2025-12-23]
-            print("\nCÓDIGO INVÁLIDO. AGUARDE 1 MINUTO.")
-            time.sleep(60)
-
-if __name__ == "__main__":
-    # O backup de 30 segundos está operando no processador [cite: 2025-12-23]
-    iniciar()
+    <ul style="list-style-type: none; padding: 0;">
+        <li style="margin: 10px 0;">
+            <a href="http://bit.ly/CR-NARUTO" target="_blank" style="text-decoration: none; color: #333; font-weight: bold;">▶ Naruto Shippuden</a>
+        </li>
+        <li style="margin: 10px 0;">
+            <a href="http://bit.ly/CR-DRAGONBALLZ" target="_blank" style="text-decoration: none; color: #333; font-weight: bold;">▶ Dragon Ball Super</a>
+        </li>
+        <li style="margin: 10px 0;">
+            <a href="http://bit.ly/CR-POKEMON" target="_blank" style="text-decoration: none; color: #333; font-weight: bold;">▶ One Piece / Pokémon</a>
+        </li>
+        <li style="margin: 10px 0;">
+            <a href="http://bit.ly/CR-DEATHNOTE" target="_blank" style="text-decoration: none; color: #333; font-weight: bold;">▶ Death Note</a>
+        </li>
+        <li style="margin: 10px 0;">
+            <a href="http://bit.ly/CR-BLEACH" target="_blank" style="text-decoration: none; color: #333; font-weight: bold;">▶ Bleach</a>
+        </li>
+        <li style="margin: 10px 0;">
+            <a href="http://m3u.me/br/VaPy" target="_blank" style="text-decoration: none; color: #ff4500; font-weight: bold;">📂 LISTA COMPLETA (DUB)</a>
+        </li>
+        <li style="margin: 10px 0;">
+            <a href="http://m3u.me/br/kZes" target="_blank" style="text-decoration: none; color: #ff4500; font-weight: bold;">📂 LISTA COMPLETA (LEG)</a>
+        </li>
+    </ul>
+</div>
