@@ -3,66 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | GLOBAL TV</title>
+    <title>LÉO KAZAMA | ULTRA-PREMIUM</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { background-color: #050505; color: #00ffcc; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; text-align: center; }
-        .container { max-width: 600px; margin: auto; background: #0a0a0a; border-radius: 25px; padding: 20px; border: 1px solid #1a1a1a; box-shadow: 0 0 40px rgba(0,255,204,0.15); }
+        /* ESTÉTICA CYBER-STREAM 2026 [cite: 2025-12-27] */
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         
-        /* Nome corrigido com Z conforme solicitado [cite: 2026-01-11] */
-        h1 { font-size: 2.2rem; text-transform: uppercase; letter-spacing: 4px; margin: 10px 0; text-shadow: 0 0 20px #00ffcc; color: #00ffcc; }
-        .sub { font-size: 10px; color: #444; margin-bottom: 20px; }
+        body { 
+            background: #000;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
 
-        .video-box { width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid #00ffcc; border-radius: 20px; margin-bottom: 20px; overflow: hidden; position: relative; }
-        video { width: 100%; height: 100%; display: block; }
+        /* FUNDO COM GRADIENTE ANIMADO */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #004d40 0%, #000 70%);
+            z-index: -1;
+            opacity: 0.6;
+        }
 
-        .seletor-canais { width: 100%; padding: 15px; background: #111; color: #00ffcc; border: 1px solid #00ffcc; border-radius: 10px; margin-bottom: 15px; font-weight: bold; font-size: 14px; }
-        
-        .btn-acao { background: #00ffcc; color: #000; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; border: none; cursor: pointer; margin-bottom: 10px; text-transform: uppercase; }
-        .footer { font-size: 9px; color: #222; margin-top: 20px; }
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 1);
+            position: relative;
+        }
+
+        /* LOGO LÉO KAZAMA COM EFEITO CHROME-NEON [cite: 2026-01-11] */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            background: linear-gradient(to bottom, #fff 30%, #00ffcc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.5));
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            background: #00ffcc;
+            color: #000;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 800;
+            border-radius: 5px;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        /* PLAYER COM MOLDURA INTELIGENTE */
+        .player-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 25px;
+            border: 4px solid #111;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        video { width: 100%; height: 100%; object-fit: contain; }
+
+        /* CONTROLES E BOTÕES TURBO */
+        .controls-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px;
+            border-radius: 15px;
+            color: #00ffcc;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        select:hover { background: rgba(0, 255, 204, 0.05); border-color: #00ffcc; }
+
+        .btn-play {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            border-radius: 15px;
+            font-weight: 900;
+            font-size: 16px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+        }
+
+        .btn-play:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.5);
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #333;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>LÉO KAZAMA</h1>
-        <div class="sub">SISTEMA DE TRANSMISSÃO 2026 | SUPER LISTA +5000 CANAIS</div>
+        <div class="badge">SYSTEM ONLINE • 5000+ CANAIS</div>
         
-        <div class="video-box">
-            <video id="video" controls autoplay></video>
+        <div class="player-frame">
+            <video id="videoCore" controls poster="https://via.placeholder.com/1280x720/000/0ff?text=LÉO+KAZAMA+STREAMING"></video>
         </div>
 
-        <div style="text-align: left; margin-bottom: 10px; font-size: 12px;">BUSCAR NA SUPER LISTA (GLOBAL):</div>
-        
-        <select id="lista-canais" class="seletor-canais" onchange="playStream(this.value)">
-            <option value="">-- SELECIONE UMA CATEGORIA --</option>
-            <option value="https://iptv-org.github.io/iptv/index.m3u">🌍 LISTA GLOBAL (TODOS OS CANAIS)</option>
-            <option value="https://iptv-org.github.io/iptv/countries/br.m3u">🇧🇷 BRASIL TOTAL</option>
-            <option value="https://iptv-org.github.io/iptv/categories/movies.m3u">🎬 FILMES 24H</option>
-            <option value="https://iptv-org.github.io/iptv/categories/animation.m3u">⛩️ ANIMES E DESENHOS</option>
-            <option value="https://iptv-org.github.io/iptv/categories/sports.m3u">⚽ ESPORTES AO VIVO</option>
-            <option value="https://iptv-org.github.io/iptv/categories/news.m3u">📰 NOTÍCIAS MUNDIAIS</option>
-        </select>
+        <div class="controls-area">
+            <select id="channelList" onchange="runStream(this.value)">
+                <option value="">📂 NAVEGAR POR CATEGORIAS</option>
+                <optgroup label="🌐 MUNDIAL">
+                    <option value="https://iptv-org.github.io/iptv/index.m3u">LISTA COMPLETA (+5000)</option>
+                    <option value="https://iptv-org.github.io/iptv/countries/br.m3u">BRASIL EXCLUSIVO</option>
+                </optgroup>
+                <optgroup label="🎬 ENTRETENIMENTO">
+                    <option value="https://iptv-org.github.io/iptv/categories/movies.m3u">FILMES 24H</option>
+                    <option value="https://iptv-org.github.io/iptv/categories/animation.m3u">ANIMES & CARTOONS</option>
+                    <option value="https://iptv-org.github.io/iptv/categories/sports.m3u">ESPORTES VIVO</option>
+                </optgroup>
+            </select>
 
-        <button class="btn-acao" onclick="playStream('https://iptv-org.github.io/iptv/index.m3u')">
-            ABRIR LISTA COMPLETA (+5000 CANAIS)
-        </button>
+            <button class="btn-play" onclick="runStream('https://iptv-org.github.io/iptv/index.m3u')">
+                LIGAR TRANSMISSÃO
+            </button>
+        </div>
 
         <div class="footer">
-            VLC ENGINE | nenasbenas.github.io | [cite: 2025-12-23]
+            CORE ENGINE 2026 | BACKUP 30S ATIVO | [cite: 2025-12-23]
         </div>
     </div>
 
     <script>
-        function playStream(url) {
+        function runStream(url) {
             if (!url) return;
-            var video = document.getElementById('video');
+            const video = document.getElementById('videoCore');
             
             if (Hls.isSupported()) {
-                var hls = new Hls();
+                const hls = new Hls();
                 hls.loadSource(url);
                 hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
+                hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = url;
                 video.play();
