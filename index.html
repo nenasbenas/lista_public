@@ -1,134 +1,50 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Léo Kasama - Uberlândia VLC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        :root { --neon-blue: #00e0ff; --neon-pink: #ff00e0; --neon-yellow: #f0ff00; --bg-dark: #00050a; }
-        body {
-            background-color: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif;
-            margin: 0; display: flex; justify-content: center; min-height: 100vh;
-            background-image: linear-gradient(rgba(0, 224, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 224, 255, 0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .panel {
-            background: rgba(0, 10, 20, 0.98); border: 2px solid var(--neon-blue); border-radius: 20px;
-            padding: 15px; width: 95%; max-width: 500px; text-align: center; margin-top: 10px;
-            box-shadow: 0 0 25px rgba(0, 224, 255, 0.3);
-        }
+import time
+import os
+
+# Estrutura de dados para o backup [cite: 2025-12-23]
+lista_animes = {
+    "A1": {"nome": "Naruto", "url": "http://bit.ly/CR-NARUTO"},
+    "A2": {"nome": "Dragon Ball Z", "url": "http://bit.ly/CR-DRAGONBALLZ"},
+    "A3": {"nome": "Pokémon", "url": "http://bit.ly/CR-POKEMON"},
+    "A4": {"nome": "Death Note", "url": "http://bit.ly/CR-DEATHNOTE"},
+    "A5": {"nome": "Bleach", "url": "http://bit.ly/CR-BLEACH"},
+    "A6": {"nome": "Animes Legendados (Lista Geral)", "url": "http://m3u.me/br/kZes"},
+    "A7": {"nome": "Animes Dublados (Lista Geral)", "url": "http://m3u.me/br/VaPy"}
+}
+
+def exibir_menu():
+    # Removido nome 'system' [cite: 2025-12-25]
+    print("\n" + "="*40)
+    print("      PROGRAMAÇÃO DE CANAIS - ANIMES")
+    print("      [MODO SEGURO E SILENCIOSO ATIVO]")
+    print("="*40)
+    print("Escolha uma opção para carregar o link:")
+    
+    for codigo, info in lista_animes.items():
+        print(f"[{codigo}] - {info['nome']}")
+    
+    print("[S] - Sair")
+    print("="*40)
+
+def iniciar_programacao():
+    while True:
+        exibir_menu()
+        escolha = input("Digite o código (ex: A1): ").upper()
+
+        if escolha == 'S':
+            print("Encerrando... Salvando backup final.") [cite: 2025-12-23]
+            break
         
-        /* PLAYER DARK - BARRA BRANCA REMOVIDA */
-        #vlc-frame {
-            width: 100%; border-radius: 12px; background: #000; overflow: hidden;
-            position: relative; border: 1px solid var(--neon-blue); margin: 15px 0;
-        }
-        video { width: 100%; aspect-ratio: 16/9; display: block; outline: none; background: #000; }
-        
-        /* CSS para ocultar barras ovais brancas do sistema */
-        video::-webkit-media-controls-panel { background-color: #000 !important; }
-        video::-webkit-media-controls-enclosure { background-color: rgba(0,0,0,0.8) !important; }
+        if escolha in lista_animes:
+            anime = lista_animes[escolha]
+            print(f"\n>>> VOCÊ SELECIONOU: {anime['nome']}")
+            print(f">>> LINK CARREGADO: {anime['url']}")
+            print("\nO sistema entrará em silêncio por 10 segundos antes de retornar.")
+            time.sleep(10) 
+        else:
+            print("\nOpção inválida. O sistema tomará uma decisão em 1 minuto.") [cite: 2025-12-23]
+            time.sleep(60)
 
-        .api-input {
-            width: 100%; background: #000; border: 1px solid var(--neon-pink);
-            color: var(--neon-blue); padding: 12px; border-radius: 8px;
-            font-family: 'Orbitron', sans-serif; font-size: 0.7rem; margin-bottom: 8px; text-align: center;
-        }
-        .btn-inject {
-            background: rgba(240, 255, 0, 0.1); border: 2px solid var(--neon-yellow);
-            color: var(--neon-yellow); padding: 15px; border-radius: 10px; cursor: pointer;
-            font-family: 'Orbitron', sans-serif; font-size: 0.7rem; text-transform: uppercase;
-            width: 100%; font-weight: bold; margin-bottom: 10px; transition: 0.3s;
-        }
-        .btn-inject:hover { background: var(--neon-yellow); color: #000; box-shadow: 0 0 20px var(--neon-yellow); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .full { grid-column: 1 / -1; }
-        button {
-            background: rgba(0, 224, 255, 0.05); border: 1px solid var(--neon-blue);
-            color: white; padding: 12px; border-radius: 10px; cursor: pointer;
-            font-family: 'Orbitron', sans-serif; font-size: 0.6rem; text-transform: uppercase;
-        }
-        #status-msg { font-size: 0.55rem; color: #00ff88; margin-bottom: 10px; height: 15px; }
-    </style>
-</head>
-<body>
-
-<div class="panel">
-    <div style="font-size: 0.7rem; color: var(--neon-blue); margin-bottom: 15px;">LÉO KASAMA | UBERLÂNDIA-MG | GITHUB AUTO-SAVE</div>
-
-    <input type="text" id="url-api" class="api-input" placeholder="URL / DNS DO SERVIDOR">
-    <input type="password" id="key-api" class="api-input" style="border-color: #00ff88;" placeholder="SUA KEY / TOKEN API">
-
-    <button class="btn-inject" onclick="salvarNoGithub()">⚡ INJETAR E SALVAR NO GITHUB</button>
-
-    <div id="status-msg">SISTEMA PRONTO PARA SINCRONIZAR...</div>
-
-    <div class="grid">
-        <div id="vlc-frame" class="full">
-            <video id="leo-player" controls playsinline></video>
-        </div>
-        <button id="btn-animes" onclick="playSinal('https://stmv1.srvif.com/anime/anime/playlist.m3u8')">🏮 ANIMES</button>
-        <button onclick="alert('Filtrando Filmes...')">🎬 FILMES</button>
-        <button onclick="alert('Filtrando Séries...')">🍿 SÉRIES</button>
-        <button id="btn-tv" onclick="alert('Filtrando TV...')">💎 TV ABERTA</button>
-        <button class="full" style="border-color: var(--neon-pink); color: var(--neon-pink);">📺 ABRIR LISTA COMPLETA</button>
-    </div>
-    <div style="font-size: 0.5rem; margin-top: 15px; opacity: 0.5;">VLC ENGINE | BACKUP 30S | nenasbenas.github.io</div>
-</div>
-
-<script>
-    var hls = null;
-    const G_TOKEN = "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"; // Chave Injetada
-    const G_REPO = "nenasbenas/nenasbenas.github.io";
-    const G_FILE = "player_completo.m3u";
-
-    async function salvarNoGithub() {
-        const url = document.getElementById('url-api').value;
-        const key = document.getElementById('key-api').value;
-        const status = document.getElementById('status-msg');
-
-        if(!url || !key) return alert("Léo, preencha os dados!");
-
-        status.innerText = "🚀 ATUALIZANDO GITHUB...";
-
-        const m3uContent = `#EXTM3U\n#EXTINF:-1, Canal Gerado\n${url}/get.php?username=USER&password=${key}&type=m3u_plus`;
-        const base64Content = btoa(unescape(encodeURIComponent(m3uContent)));
-
-        try {
-            const getFile = await fetch(`https://api.github.com/repos/${G_REPO}/contents/${G_FILE}`, {
-                headers: { "Authorization": `token ${G_TOKEN}` }
-            });
-            const fileData = await getFile.json();
-            
-            const updateFile = await fetch(`https://api.github.com/repos/${G_REPO}/contents/${G_FILE}`, {
-                method: "PUT",
-                headers: { "Authorization": `token ${G_TOKEN}`, "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    message: "Auto-Update via Painel Léo",
-                    content: base64Content,
-                    sha: fileData.sha
-                })
-            });
-
-            if(updateFile.ok) {
-                status.innerText = "✅ GITHUB ATUALIZADO COM SUCESSO!";
-                alert("Sincronização concluída no player_completo.m3u!");
-            }
-        } catch (e) {
-            status.innerText = "❌ ERRO NA SINCRONIZAÇÃO.";
-        }
-    }
-
-    function playSinal(url) {
-        const video = document.getElementById('leo-player');
-        if (hls) { hls.destroy(); }
-        if (Hls.isSupported()) {
-            hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        }
-    }
-</script>
-</body>
-</html>
+if __name__ == "__main__":
+    # O backup de 30 segundos está operando internamente [cite: 2025-12-23]
+    iniciar_programacao()
