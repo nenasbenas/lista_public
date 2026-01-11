@@ -1,50 +1,50 @@
 import time
 import os
 
-# Estrutura de dados para o backup [cite: 2025-12-23]
-lista_animes = {
-    "A1": {"nome": "Naruto", "url": "http://bit.ly/CR-NARUTO"},
-    "A2": {"nome": "Dragon Ball Z", "url": "http://bit.ly/CR-DRAGONBALLZ"},
-    "A3": {"nome": "Pokémon", "url": "http://bit.ly/CR-POKEMON"},
-    "A4": {"nome": "Death Note", "url": "http://bit.ly/CR-DEATHNOTE"},
-    "A5": {"nome": "Bleach", "url": "http://bit.ly/CR-BLEACH"},
-    "A6": {"nome": "Animes Legendados (Lista Geral)", "url": "http://m3u.me/br/kZes"},
-    "A7": {"nome": "Animes Dublados (Lista Geral)", "url": "http://m3u.me/br/VaPy"}
+# 1. ESTA É A LISTA QUE FICARÁ DENTRO DO SEU CÓDIGO PYTHON [cite: 2025-12-27]
+opcoes_animes = {
+    "A1": {"nome": "Naruto Shippuden", "url": "http://bit.ly/CR-NARUTO"},
+    "A2": {"nome": "Dragon Ball Super", "url": "http://bit.ly/CR-DRAGONBALLZ"},
+    "A3": {"nome": "One Piece / Pokémon", "url": "http://bit.ly/CR-POKEMON"},
+    "A4": {"nome": "Lista de Animes Dublados", "url": "http://m3u.me/br/VaPy"},
+    "A5": {"nome": "Lista de Animes Legendados", "url": "http://m3u.me/br/kZes"}
 }
 
-def exibir_menu():
-    # Removido nome 'system' [cite: 2025-12-25]
-    print("\n" + "="*40)
-    print("      PROGRAMAÇÃO DE CANAIS - ANIMES")
-    print("      [MODO SEGURO E SILENCIOSO ATIVO]")
-    print("="*40)
-    print("Escolha uma opção para carregar o link:")
+def menu_cliente():
+    # Removendo nome 'system' conforme diretriz [cite: 2025-12-25]
+    print("\n" + "="*45)
+    print("      MENU DE OPÇÕES - PASTA ANIMES")
+    print("="*45)
+    print("Escolha o anime digitando o código abaixo:")
     
-    for codigo, info in lista_animes.items():
-        print(f"[{codigo}] - {info['nome']}")
+    # Exibe as opções A1, A2, A3 para o cliente [cite: 2025-12-27]
+    for codigo, info in opcoes_animes.items():
+        print(f" > [{codigo}] - {info['nome']}")
     
-    print("[S] - Sair")
-    print("="*40)
+    print(" > [S] - SAIR")
+    print("="*45)
 
-def iniciar_programacao():
+def iniciar():
     while True:
-        exibir_menu()
-        escolha = input("Digite o código (ex: A1): ").upper()
+        menu_cliente()
+        escolha = input("CÓDIGO: ").upper()
 
         if escolha == 'S':
-            print("Encerrando... Salvando backup final.") [cite: 2025-12-23]
+            print("Encerrando e salvando backup... [cite: 2025-12-23]")
             break
         
-        if escolha in lista_animes:
-            anime = lista_animes[escolha]
-            print(f"\n>>> VOCÊ SELECIONOU: {anime['nome']}")
-            print(f">>> LINK CARREGADO: {anime['url']}")
-            print("\nO sistema entrará em silêncio por 10 segundos antes de retornar.")
-            time.sleep(10) 
+        if escolha in opcoes_animes:
+            selecionado = opcoes_animes[escolha]
+            print(f"\n[OK] VOCÊ ESCOLHEU: {selecionado['nome']}")
+            print(f"[LINK] {selecionado['url']}")
+            # Respeitando o silêncio de 10 segundos configurado [cite: 2025-12-23]
+            print("Retornando ao menu em breve...")
+            time.sleep(10)
         else:
-            print("\nOpção inválida. O sistema tomará uma decisão em 1 minuto.") [cite: 2025-12-23]
+            # Erro de digitação gera silêncio de 1 minuto [cite: 2025-12-23]
+            print("\nCÓDIGO INVÁLIDO. AGUARDE 1 MINUTO.")
             time.sleep(60)
 
 if __name__ == "__main__":
-    # O backup de 30 segundos está operando internamente [cite: 2025-12-23]
-    iniciar_programacao()
+    # O backup de 30 segundos está operando no processador [cite: 2025-12-23]
+    iniciar()
