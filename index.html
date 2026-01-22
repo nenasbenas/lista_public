@@ -3,73 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | VIP BRAZIL</title>
+    <title>LÉO KAZAMA | RAMYS 2026 CORE</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --neon: #00ffcc; --glass: rgba(10, 10, 10, 0.95); --border: rgba(0, 255, 204, 0.4); }
+        :root { --neon: #00ffcc; --glass: rgba(10, 10, 10, 0.96); --border: rgba(0, 255, 204, 0.3); }
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
         
         #cinemaOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 50; display: none; opacity: 0; transition: 0.5s; }
-        
-        .container { width: 95%; max-width: 1100px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); border-radius: 40px; padding: 40px; position: relative; z-index: 100; transition: 0.5s; box-shadow: 0 0 50px rgba(0,255,204,0.1); }
+        .container { width: 95%; max-width: 1100px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--border); border-radius: 40px; padding: 35px; position: relative; z-index: 100; transition: 0.5s; }
         
         .cinema-active .container { border-color: transparent; background: transparent; transform: scale(1.05); }
         .cinema-active header, .cinema-active .controls-grid, .cinema-active .footer-info, .cinema-active #channelList { opacity: 0; pointer-events: none; }
 
-        header h1 { font-size: 3rem; font-weight: 900; letter-spacing: 8px; text-align: center; background: linear-gradient(135deg, #fff 30%, var(--neon) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+        header h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: 5px; text-align: center; background: linear-gradient(135deg, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
         
-        .status-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
-        .badge { font-size: 11px; padding: 6px 18px; border-radius: 50px; background: rgba(0, 255, 204, 0.1); color: var(--neon); border: 1px solid var(--neon); font-weight: 800; text-transform: uppercase; }
-
-        .player-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 25px; overflow: hidden; border: 2px solid #222; margin-bottom: 30px; transition: 0.5s; }
-        .cinema-active .player-container { border: 2px solid var(--neon); box-shadow: 0 0 80px rgba(0, 255, 204, 0.4); }
+        .player-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 25px; overflow: hidden; border: 2px solid #1a1a1a; margin-bottom: 25px; transition: 0.5s; }
+        .cinema-active .player-container { border: 2px solid var(--neon); box-shadow: 0 0 60px rgba(0, 255, 204, 0.3); }
         video { width: 100%; height: 100%; }
 
-        .controls-grid { display: grid; grid-template-columns: 1fr auto; gap: 15px; margin-bottom: 15px; }
-        input, select { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 18px; border-radius: 15px; color: #fff; font-size: 16px; }
-        input:focus { border-color: var(--neon); }
+        .controls-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 15px; margin-bottom: 15px; }
+        input, select { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; color: #fff; font-size: 14px; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--neon); }
 
-        .btn-cinema { background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-cinema:hover { background: var(--neon); color: #000; }
-
-        #exitCinema { position: fixed; top: 30px; right: 30px; z-index: 1000; display: none; background: var(--neon); color: #000; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 900; cursor: pointer; }
+        .btn-cinema { background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        #exitCinema { position: fixed; top: 30px; right: 30px; z-index: 1000; display: none; background: var(--neon); color: #000; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 900; cursor: pointer; }
         
         .loader { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 255, 204, 0.1); border-top: 5px solid var(--neon); border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(0, 255, 204, 0.1); border-top: 4px solid var(--neon); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body id="mainBody">
 
     <div id="cinemaOverlay"></div>
-    <button id="exitCinema" onclick="toggleCinema(false)">SAIR DO CINEMA</button>
+    <button id="exitCinema" onclick="toggleCinema(false)">VOLTAR</button>
 
     <div class="container">
         <header>
             <h1>LÉO KAZAMA</h1>
-            <div class="status-bar">
-                <span class="badge">BRAZIL VIP ONLINE</span>
-                <button class="btn-cinema" onclick="toggleCinema(true)"><i class="fas fa-film"></i> MODO CINEMA</button>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <button class="btn-cinema" onclick="toggleCinema(true)">MODO CINEMA</button>
             </div>
         </header>
 
         <div class="player-container">
             <div id="mainLoader" class="loader"><div class="spinner"></div></div>
-            <video id="videoCore" controls poster="https://docdog.top/logo/countries/brazil/globonews.png"></video>
+            <video id="videoCore" controls></video>
         </div>
 
         <div class="controls-grid">
-            <input type="text" id="filterInput" placeholder="🔍 Buscar canal VIP (HBO, Globo, Sportv...)" onkeyup="filterChannels()">
+            <select id="sourceSelect" onchange="loadM3U(this.value)">
+                <option value="">📂 SELECIONE UMA LISTA (RAMYS 2026)</option>
+                <optgroup label="🇧🇷 CANAIS BRASIL">
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR01.m3u8">Canais BR 01</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR02.m3u8">Canais BR 02</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR03.m3u">Canais BR 03</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR04.m3u">Canais BR 04</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR05.m3u">Canais BR 05</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR06.m3u">Canais BR 06</option>
+                </optgroup>
+                <optgroup label="🌍 LISTAS MUNDIAIS">
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial1.m3u8">Lista Mundial 1</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial2.m3u8">Lista Mundial 2</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial3.m3u8">Lista Mundial 3</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial4.m3u8">Lista Mundial 4</option>
+                    <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial5.m3u8">Lista Mundial 5</option>
+                </optgroup>
+            </select>
+            <input type="text" id="filterInput" placeholder="🔍 Buscar canal na lista..." onkeyup="filterChannels()">
         </div>
 
         <select id="channelList" onchange="playStream(this.value)">
-            <option value="">📺 CARREGANDO CANAIS VIP...</option>
+            <option value="">📺 AGUARDANDO FONTE...</option>
         </select>
 
-        <div class="footer-info" style="margin-top:30px; font-size:10px; opacity:0.4; text-align:center; letter-spacing:2px;">
-            VIP ENGINE v4.0 | LÉO KAZAMA EXCLUSIVE
+        <div class="footer-info" style="margin-top:20px; font-size:10px; opacity:0.3; text-align:center;">
+            HUB: github.com/Ramys/Iptv-Brasil-2026 | LÉO KAZAMA ENGINE
         </div>
     </div>
 
@@ -78,77 +89,37 @@
         const channelList = document.getElementById('channelList');
         const loader = document.getElementById('mainLoader');
         let hls = new Hls();
-
-        // SUA LISTA VIP INSERIDA DIRETAMENTE
-        const rawM3U = `
-#EXTINF:-1 tvg-name="BR: A&E",BR: A&E
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4829
-#EXTINF:-1 tvg-name="BR: AMC",BR: AMC
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4830
-#EXTINF:-1 tvg-name="BR: ANIMAL PLANET",BR: ANIMAL PLANET
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4831
-#EXTINF:-1 tvg-name="BR: AXN",BR: AXN
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4832
-#EXTINF:-1 tvg-name="BR: BABY",BR: BABY
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4833
-#EXTINF:-1 tvg-name="BR: BAND NEWS",BR: BAND NEWS
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4834
-#EXTINF:-1 tvg-name="BR: BAND SPORT",BR: BAND SPORT
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4835
-#EXTINF:-1 tvg-name="BR: BOOMERANG",BR: BOOMERANG
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4836
-#EXTINF:-1 tvg-name="BR: CARTOON NETWORK",BR: CARTOON NETWORK
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4837
-#EXTINF:-1 tvg-name="BR: COMBATE",BR: COMBATE
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4838
-#EXTINF:-1 tvg-name="BR: COMEDY CENTRAL",BR: COMEDY CENTRAL
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4839
-#EXTINF:-1 tvg-name="BR: CONMEBOL 2",BR: CONMEBOL 2
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4840
-#EXTINF:-1 tvg-name="BR: DISCOVERY CHANNEL",BR: DISCOVERY CHANNEL
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4841
-#EXTINF:-1 tvg-name="BR: DISCOVERY KIDS",BR: DISCOVERY KIDS
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4845
-#EXTINF:-1 tvg-name="BR: DISNEY CHANNEL",BR: DISNEY CHANNEL
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4851
-#EXTINF:-1 tvg-name="BR: ESPN",BR: ESPN
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4854
-#EXTINF:-1 tvg-name="BR: GLOBO NEWS",BR: GLOBO NEWS
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4864
-#EXTINF:-1 tvg-name="BR: GLOBO SP",BR: GLOBO SP
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4865
-#EXTINF:-1 tvg-name="BR: HBO 1",BR: HBO 1
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4869
-#EXTINF:-1 tvg-name="BR: MEGA PIX",BR: MEGA PIX
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4877
-#EXTINF:-1 tvg-name="BR: PREMIERE CLUBES",BR: PREMIERE CLUBES
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4892
-#EXTINF:-1 tvg-name="BR: SBT",BR: SBT
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4898
-#EXTINF:-1 tvg-name="BR: SPORTV 1",BR: SPORTV 1
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4902
-#EXTINF:-1 tvg-name="BR: TELE CINE PREMIUM",BR: TELE CINE PREMIUM
-http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4913
-        `;
-
         let allChannels = [];
 
-        function parseVIPList() {
-            const lines = rawM3U.trim().split('\n');
+        async function loadM3U(url) {
+            if (!url) return;
+            loader.style.display = 'block';
+            channelList.innerHTML = '<option>Sincronizando com GitHub Ramys...</option>';
+            try {
+                const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxy);
+                const json = await response.json();
+                parseM3U(json.contents);
+            } catch (err) { alert("Erro ao carregar lista."); }
+            loader.style.display = 'none';
+        }
+
+        function parseM3U(data) {
+            const lines = data.split('\n');
+            allChannels = [];
             for (let i = 0; i < lines.length; i++) {
                 if (lines[i].includes('#EXTINF')) {
-                    const name = lines[i].split(',')[1] || "Canal VIP";
-                    const url = lines[i+1]?.trim();
-                    if (url && url.startsWith('http')) {
-                        allChannels.push({ name, url });
-                    }
+                    const name = lines[i].split(',')[1] || "Canal";
+                    let url = "";
+                    for(let j=i+1; j<=i+3; j++) { if(lines[j]?.trim().startsWith('http')) { url = lines[j].trim(); break; } }
+                    if(url) allChannels.push({ name: name.trim(), url });
                 }
             }
             renderChannels(allChannels);
         }
 
         function renderChannels(list) {
-            channelList.innerHTML = `<option value="">✅ ${list.length} CANAIS VIP CARREGADOS</option>`;
+            channelList.innerHTML = `<option value="">✅ ${list.length} CANAIS ENCONTRADOS</option>`;
             list.forEach(ch => {
                 const opt = document.createElement('option');
                 opt.value = ch.url; opt.textContent = ch.name;
@@ -163,21 +134,11 @@ http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4913
 
         function playStream(url) {
             if (!url) return;
-            loader.style.display = 'block';
             if (Hls.isSupported()) {
-                hls.destroy();
-                hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play();
-                    loader.style.display = 'none';
-                });
-            } else {
-                video.src = url;
-                video.play();
-                loader.style.display = 'none';
-            }
+                hls.destroy(); hls = new Hls();
+                hls.loadSource(url); hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+            } else { video.src = url; video.play(); }
         }
 
         function toggleCinema(active) {
@@ -187,9 +148,6 @@ http://vipketseyket.top:8080/VIP017741743173529373/aacb05f76c36/4913
             if (active) { b.classList.add('cinema-active'); o.style.display = 'block'; setTimeout(() => o.style.opacity = '1', 10); e.style.display = 'block'; }
             else { b.classList.remove('cinema-active'); o.style.opacity = '0'; setTimeout(() => o.style.display = 'none', 500); e.style.display = 'none'; }
         }
-
-        // Inicia a lista VIP
-        parseVIPList();
     </script>
 </body>
 </html>
