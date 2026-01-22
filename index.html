@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | NEXT GEN TV 2026</title>
+    <title>LÉO KAZAMA | PREMIUM TV 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root { --main: #00ffcc; --bg: #0a0c10; --card: #161b22; --text: #f0f6fc; }
@@ -22,15 +22,17 @@
         .controls { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         
-        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 11px; }
-        button.active { background: var(--main); color: #000; border: none; }
+        /* Botões Estilizados */
+        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 11px; text-transform: uppercase; }
+        button:hover { border-color: var(--main); color: var(--main); }
+        button.active { background: var(--main); color: #000; border: none; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
         
-        input { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 12px; width: 100%; outline: none; }
-        input:focus { border-color: var(--main); }
+        input#search { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 12px; width: 100%; outline: none; }
+        input#search:focus { border-color: var(--main); }
 
         .list-container { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .canal-card { background: var(--card); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #30363d; cursor: pointer; }
-        .canal-card:active { transform: scale(0.98); background: #21262d; }
+        .canal-card { background: var(--card); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #30363d; cursor: pointer; transition: 0.2s; }
+        .canal-card:hover { border-color: var(--main); transform: translateX(5px); }
         .canal-img { width: 50px; height: 50px; border-radius: 10px; background: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--main); border: 1px solid #30363d; object-fit: contain; }
 
         ::-webkit-scrollbar { width: 4px; }
@@ -41,29 +43,27 @@
 
 <header>
     <h1>LÉO KAZAMA VIP</h1>
-    <div id="count" style="font-size: 11px; color: var(--main);">OFFLINE</div>
+    <div id="count" style="font-size: 11px; color: var(--main);">PRONTO</div>
 </header>
 
 <div class="player-section">
     <div class="video-container">
         <video id="video" controls autoplay playsinline></video>
     </div>
-    <div class="status-bar" id="current">SISTEMA PRONTO</div>
+    <div class="status-bar" id="current">ESCOLHA UMA CATEGORIA ABAIXO</div>
 </div>
 
 <div class="controls">
     <div class="btn-grid">
-        <button class="active" onclick="fastLoad('iptvorg')">TV ABERTA</button>
-        <button class="active" onclick="fastLoad('pluto')">PLUTO TV</button>
-        <button class="active" onclick="fastLoad('tasta')">TASTA.ME</button>
+        <button onclick="fastLoad('iptvorg')">TV ABERTA</button>
+        <button onclick="fastLoad('pluto')">PLUTO TV</button>
+        <button onclick="fastLoad('tasta')">FILMES/SÉRIES</button>
     </div>
-    <input type="text" id="urlInput" placeholder="Link M3U8 ou GitHub...">
-    <button onclick="capture()" style="background:#fff; color:#000; width:100%; border-radius:12px; font-weight:900;">SCANEAR AGORA</button>
-    <input type="text" id="search" placeholder="🔍 Buscar canal na lista..." onkeyup="filter()">
+    <input type="text" id="search" placeholder="🔍 Buscar canal na lista carregada..." onkeyup="filter()">
 </div>
 
 <div class="list-container" id="lista">
-    <p style="text-align:center; color:#555; margin-top:20px;">Selecione uma fonte ou cole um link.</p>
+    <p style="text-align:center; color:#555; margin-top:20px;">Selecione uma categoria para carregar os canais.</p>
 </div>
 
 <script>
@@ -71,39 +71,28 @@
     let hls = new Hls();
     let channels = [];
 
-    const fastLinks = {
+    // URLs ESCONDIDAS DO USUÁRIO
+    const secretSources = {
         iptvorg: 'https://iptv-org.github.io/iptv/countries/br.m3u',
         pluto: 'https://raw.githubusercontent.com/TiagoS-IPTV/Pluto-TV/main/plutotv_br.m3u',
         tasta: 'https://raw.githubusercontent.com/tasta/iptv/master/channels/br.m3u'
     };
 
-    function fastLoad(key) {
-        document.getElementById('urlInput').value = fastLinks[key];
-        capture();
-    }
-
-    async function capture() {
-        let url = document.getElementById('urlInput').value.trim();
-        if(!url) return;
-        
-        // Correção de links GitHub
-        url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
-        
-        document.getElementById('count').innerText = "VARRENDO...";
+    async function fastLoad(key) {
+        const url = secretSources[key];
+        document.getElementById('count').innerText = "SINCRONIZANDO...";
+        document.getElementById('lista').innerHTML = "<p style='text-align:center; color:var(--main);'>CARREGANDO BANCO DE DADOS...</p>";
 
         try {
-            // Proxy com Cache Buster (Timestamp) para pegar sempre a lista mais nova
             const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&cb=${Date.now()}`;
             const response = await fetch(proxy);
             const data = await response.json();
             
             if (data.contents && data.contents.includes('#EXTM3U')) {
                 parse(data.contents);
-            } else {
-                alert("O alvo não retornou uma lista válida.");
             }
         } catch (e) {
-            alert("Erro na conexão. Verifique o link.");
+            alert("Erro ao conectar com o servidor.");
         }
     }
 
