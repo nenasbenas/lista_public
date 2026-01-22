@@ -3,65 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | GLOBAL TV 2026</title>
+    <title>LÉO KAZAMA | INFINITE TV</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { --main: #00ffcc; --bg: #0a0c10; --card: #161b22; --text: #f0f6fc; --off: #ff4d4d; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { --main: #00ffcc; --bg: #05070a; --card: #12161f; --text: #e6edf3; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        header { padding: 15px; background: rgba(10, 12, 16, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-        header h1 { margin: 0; font-size: 18px; color: var(--main); letter-spacing: 1px; }
+        /* Header com Brilho Neon */
+        header { padding: 18px; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid #21262d; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
+        header h1 { margin: 0; font-size: 20px; color: var(--main); text-transform: uppercase; letter-spacing: 2px; }
 
-        .player-section { width: 100%; background: #000; position: sticky; top: 0; z-index: 90; box-shadow: 0 4px 20px #000; }
-        .video-container { width: 100%; aspect-ratio: 16/9; background: #000; }
-        video { width: 100%; height: 100%; }
+        /* Player Premium */
+        .player-section { width: 100%; background: #000; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #161b22; }
+        .video-container { width: 100%; aspect-ratio: 16/9; position: relative; }
+        video { width: 100%; height: 100%; display: block; }
 
-        .status-bar { font-size: 11px; color: var(--main); text-align: center; padding: 6px; background: rgba(0,255,204,0.05); border-bottom: 1px solid #30363d; font-weight: bold; }
+        .status-bar { font-size: 11px; color: var(--main); text-align: center; padding: 8px; background: rgba(0,255,204,0.03); font-weight: 600; letter-spacing: 0.5px; }
 
-        .controls { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        /* Controles Otimizados */
+        .controls { padding: 20px; display: flex; flex-direction: column; gap: 12px; background: linear-gradient(to bottom, #0a0c10, var(--bg)); }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
         
-        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 9px; text-transform: uppercase; }
-        button:active { transform: scale(0.95); background: var(--main); color: #000; }
+        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        button:hover { border-color: var(--main); color: var(--main); transform: translateY(-2px); }
+        button:active { transform: scale(0.95); }
         
-        input#search { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 12px; width: 100%; outline: none; }
+        input#search { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 14px; border-radius: 14px; width: 100%; outline: none; font-size: 14px; transition: 0.3s; }
+        input#search:focus { border-color: var(--main); box-shadow: 0 0 10px rgba(0, 255, 204, 0.1); }
 
-        .list-container { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .canal-card { background: var(--card); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #30363d; cursor: pointer; position: relative; }
+        /* Lista de Canais Fluida */
+        .list-container { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .canal-card { background: var(--card); padding: 14px; border-radius: 18px; display: flex; align-items: center; gap: 16px; border: 1px solid #21262d; cursor: pointer; transition: 0.2s; }
+        .canal-card:hover { background: #1c212b; border-color: #30363d; }
         
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; position: absolute; top: 12px; right: 12px; background: var(--main); box-shadow: 0 0 8px var(--main); }
-        .canal-img { width: 50px; height: 50px; border-radius: 10px; background: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--main); border: 1px solid #30363d; object-fit: contain; }
+        .canal-img { width: 50px; height: 50px; border-radius: 12px; background: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--main); border: 1px solid #30363d; object-fit: contain; }
+        .canal-info b { font-size: 15px; color: #fff; display: block; margin-bottom: 2px; }
+        .canal-info span { font-size: 12px; color: #7d8590; }
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--main); border-radius: 10px; }
+        /* Loader de Carregamento */
+        .loader { width: 20px; height: 20px; border: 2px solid var(--main); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>LÉO KAZAMA VIP</h1>
-    <div id="count" style="font-size: 11px; color: var(--main);">AUTO-SCAN ON</div>
+    <div id="loader" class="loader"></div>
+    <div id="count" style="font-size: 12px; color: var(--main); font-weight: bold;">SISTEMA PRONTO</div>
 </header>
 
 <div class="player-section">
     <div class="video-container">
         <video id="video" controls autoplay playsinline></video>
     </div>
-    <div class="status-bar" id="current">SISTEMA INTERNACIONAL ATIVO</div>
+    <div class="status-bar" id="current">SELECIONE UMA CATEGORIA PARA INICIAR</div>
 </div>
 
 <div class="controls">
     <div class="btn-grid">
-        <button onclick="fastLoad('br')">BRASIL TV</button>
-        <button onclick="fastLoad('intl')">MUNDIAL VIP</button>
-        <button onclick="fastLoad('pluto')">PLUTO GERAL</button>
+        <button onclick="smartLoad('br')">BRASIL TV</button>
+        <button onclick="smartLoad('intl')">CANAIS MUNDIAIS</button>
+        <button onclick="smartLoad('pluto')">PLUTO GERAL</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar canal..." onkeyup="filter()">
+    <input type="text" id="search" placeholder="🔍 Filtrar por nome do canal..." onkeyup="filter()">
 </div>
 
 <div class="list-container" id="lista">
-    <p style="text-align:center; color:#555; margin-top:20px;">Clique em um dos botões para carregar a grade.</p>
+    <div style="text-align:center; padding:40px; color:#484f58;">
+        <p>Acesse as melhores fontes verificadas de 2026.</p>
+    </div>
 </div>
 
 <script>
@@ -69,24 +84,45 @@
     let hls = new Hls();
     let channels = [];
 
-    // FONTES MUNDIAIS 2026 - VERIFICADAS
-    const secretSources = {
+    const db = {
         br: 'https://iptv-org.github.io/iptv/countries/br.m3u',
-        intl: 'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/br.m3u',
-        pluto: 'https://i.mjh.nz/PlutoTV/all.m3u8' // Lista mundial da Pluto
+        intl: 'https://iptv-org.github.io/iptv/languages/por.m3u',
+        pluto: 'https://i.mjh.nz/PlutoTV/br.m3u8'
     };
 
-    async function fastLoad(key) {
-        const url = secretSources[key];
-        document.getElementById('lista').innerHTML = "<p style='text-align:center; color:var(--main);'>CONECTANDO AOS SATÉLITES...</p>";
+    async function smartLoad(key) {
+        showLoader(true);
+        const url = db[key];
+        document.getElementById('current').innerText = "SINCRONIZANDO COM SERVIDORES...";
+        
+        // SISTEMA DE TRIPLA REDUNDÂNCIA (Proxies diferentes para evitar erro)
+        const proxies = [
+            url, // Tentativa direta primeiro
+            `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&cb=${Date.now()}`
+        ];
 
-        try {
-            // Usando proxy para garantir o carregamento do GitHub/MJH
-            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&cb=${Date.now()}`;
-            const response = await fetch(proxy);
-            const data = await response.json();
-            if (data.contents) parse(data.contents);
-        } catch (e) { alert("Erro ao carregar sinal mundial."); }
+        let success = false;
+        for (let p of proxies) {
+            try {
+                const response = await fetch(p);
+                const text = await response.text();
+                // AllOrigins retorna JSON, precisamos tratar
+                const cleanData = text.startsWith('{') ? JSON.parse(text).contents : text;
+                
+                if (cleanData && cleanData.includes('#EXTM3U')) {
+                    parse(cleanData);
+                    success = true;
+                    break;
+                }
+            } catch (e) { console.log("Falha no proxy, tentando próximo..."); }
+        }
+
+        if (!success) {
+            alert("Erro de conexão. Tente novamente em instantes ou troque a conexão.");
+            document.getElementById('current').innerText = "ERRO NA REDE";
+        }
+        showLoader(false);
     }
 
     function parse(data) {
@@ -94,50 +130,48 @@
         channels = [];
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].includes('#EXTINF')) {
-                const name = lines[i].split(',')[1]?.trim() || "Global Canal";
+                const name = lines[i].split(',')[1]?.trim() || "Canal HD";
                 const logo = lines[i].match(/tvg-logo="([^"]+)"/)?.[1] || "";
-                let stream = "";
-                for (let j = i + 1; j < i + 4; j++) {
-                    if (lines[j]?.trim().startsWith('http')) {
-                        stream = lines[j].trim();
-                        break;
-                    }
-                }
-                if(stream) channels.push({ name, logo, stream });
+                let stream = lines[i+1]?.trim();
+                if(stream && stream.startsWith('http')) channels.push({ name, logo, stream });
             }
         }
         render(channels);
-        document.getElementById('count').innerText = channels.length + " CANAIS";
+        document.getElementById('count').innerText = channels.length + " CANAIS ON";
+        document.getElementById('current').innerText = "LISTA CARREGADA COM SUCESSO";
     }
 
     function render(data) {
         const container = document.getElementById('lista');
         container.innerHTML = "";
-        data.forEach((c) => {
+        data.forEach(c => {
             const card = document.createElement('div');
             card.className = 'canal-card';
-            const img = c.logo ? `<img src="${c.logo}" class="canal-img" onerror="this.src='https://via.placeholder.com/50/000/00ffcc?text=TV'">` : `<div class="canal-img">${c.name[0]}</div>`;
-            card.innerHTML = `<div class="status-dot"></div> ${img} <div><b>${c.name}</b><br><small style="color:#8b949e;">Internacional HD</small></div>`;
+            const img = c.logo ? `<img src="${c.logo}" class="canal-img" onerror="this.style.display='none'">` : `<div class="canal-img">${c.name[0]}</div>`;
+            card.innerHTML = `${img} <div class="canal-info"><b>${c.name}</b><span>Streaming 1080p • Digital</span></div>`;
             card.onclick = () => play(c.stream, c.name);
             container.appendChild(card);
         });
     }
 
     function play(url, name) {
-        document.getElementById('current').innerText = "📡 SINTONIZANDO: " + name;
+        document.getElementById('current').innerText = "📺 REPRODUZINDO: " + name;
         if (Hls.isSupported()) {
-            hls.destroy();
-            hls = new Hls({ enableWorker: true, lowLatencyMode: true });
-            hls.loadSource(url);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        } else { video.src = url; video.play(); }
+            hls.destroy(); hls = new Hls({ lowLatencyMode: true });
+            hls.loadSource(url); hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+        } else { video.src = url; video.play().catch(() => {}); }
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function filter() {
         const q = document.getElementById('search').value.toLowerCase();
         render(channels.filter(x => x.name.toLowerCase().includes(q)));
+    }
+
+    function showLoader(show) {
+        document.getElementById('loader').style.display = show ? 'block' : 'none';
+        document.getElementById('count').style.display = show ? 'none' : 'block';
     }
 </script>
 </body>
