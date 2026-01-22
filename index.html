@@ -6,7 +6,7 @@
     <title>LÉO KAZAMA | PREMIUM TV 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { --main: #00ffcc; --bg: #0a0c10; --card: #161b22; --text: #f0f6fc; }
+        :root { --main: #00ffcc; --bg: #0a0c10; --card: #161b22; --text: #f0f6fc; --off: #ff4d4d; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
@@ -22,17 +22,19 @@
         .controls { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         
-        /* Botões Estilizados */
-        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 11px; text-transform: uppercase; }
+        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 10px; text-transform: uppercase; }
         button:hover { border-color: var(--main); color: var(--main); }
-        button.active { background: var(--main); color: #000; border: none; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
         
         input#search { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 12px; width: 100%; outline: none; }
-        input#search:focus { border-color: var(--main); }
 
         .list-container { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .canal-card { background: var(--card); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #30363d; cursor: pointer; transition: 0.2s; }
-        .canal-card:hover { border-color: var(--main); transform: translateX(5px); }
+        .canal-card { background: var(--card); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #30363d; cursor: pointer; position: relative; }
+        
+        /* Luz de Status */
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; position: absolute; top: 12px; right: 12px; background: #555; box-shadow: 0 0 5px #000; }
+        .dot-online { background: var(--main); box-shadow: 0 0 8px var(--main); }
+        .dot-offline { background: var(--off); box-shadow: 0 0 8px var(--off); }
+
         .canal-img { width: 50px; height: 50px; border-radius: 10px; background: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--main); border: 1px solid #30363d; object-fit: contain; }
 
         ::-webkit-scrollbar { width: 4px; }
@@ -43,27 +45,27 @@
 
 <header>
     <h1>LÉO KAZAMA VIP</h1>
-    <div id="count" style="font-size: 11px; color: var(--main);">PRONTO</div>
+    <div id="count" style="font-size: 11px; color: var(--main);">STATUS: OK</div>
 </header>
 
 <div class="player-section">
     <div class="video-container">
         <video id="video" controls autoplay playsinline></video>
     </div>
-    <div class="status-bar" id="current">ESCOLHA UMA CATEGORIA ABAIXO</div>
+    <div class="status-bar" id="current">VERIFICADOR DE SINAL ATIVO</div>
 </div>
 
 <div class="controls">
     <div class="btn-grid">
         <button onclick="fastLoad('iptvorg')">TV ABERTA</button>
         <button onclick="fastLoad('pluto')">PLUTO TV</button>
-        <button onclick="fastLoad('tasta')">FILMES/SÉRIES</button>
+        <button onclick="checkAllStatus()" style="background: rgba(0,255,204,0.1); color: var(--main);">TESTAR SINAIS</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar canal na lista carregada..." onkeyup="filter()">
+    <input type="text" id="search" placeholder="🔍 Buscar canal..." onkeyup="filter()">
 </div>
 
 <div class="list-container" id="lista">
-    <p style="text-align:center; color:#555; margin-top:20px;">Selecione uma categoria para carregar os canais.</p>
+    <p style="text-align:center; color:#555; margin-top:20px;">Carregue uma lista para testar os canais.</p>
 </div>
 
 <script>
@@ -71,29 +73,21 @@
     let hls = new Hls();
     let channels = [];
 
-    // URLs ESCONDIDAS DO USUÁRIO
     const secretSources = {
         iptvorg: 'https://iptv-org.github.io/iptv/countries/br.m3u',
-        pluto: 'https://raw.githubusercontent.com/TiagoS-IPTV/Pluto-TV/main/plutotv_br.m3u',
-        tasta: 'https://raw.githubusercontent.com/tasta/iptv/master/channels/br.m3u'
+        pluto: 'https://raw.githubusercontent.com/TiagoS-IPTV/Pluto-TV/main/plutotv_br.m3u'
     };
 
     async function fastLoad(key) {
         const url = secretSources[key];
-        document.getElementById('count').innerText = "SINCRONIZANDO...";
-        document.getElementById('lista').innerHTML = "<p style='text-align:center; color:var(--main);'>CARREGANDO BANCO DE DADOS...</p>";
+        document.getElementById('lista').innerHTML = "<p style='text-align:center; color:var(--main);'>SINCRONIZANDO CANAIS...</p>";
 
         try {
             const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&cb=${Date.now()}`;
             const response = await fetch(proxy);
             const data = await response.json();
-            
-            if (data.contents && data.contents.includes('#EXTM3U')) {
-                parse(data.contents);
-            }
-        } catch (e) {
-            alert("Erro ao conectar com o servidor.");
-        }
+            if (data.contents) parse(data.contents);
+        } catch (e) { alert("Erro ao carregar fonte."); }
     }
 
     function parse(data) {
@@ -110,42 +104,65 @@
                         break;
                     }
                 }
-                if(stream) channels.push({ name, logo, stream });
+                if(stream) channels.push({ name, logo, stream, status: 'unknown' });
             }
         }
         render(channels);
-        document.getElementById('count').innerText = channels.length + " CANAIS";
     }
 
     function render(data) {
         const container = document.getElementById('lista');
         container.innerHTML = "";
-        data.forEach(c => {
+        data.forEach((c, index) => {
             const card = document.createElement('div');
             card.className = 'canal-card';
+            card.id = `canal-${index}`;
+            const statusClass = c.status === 'online' ? 'dot-online' : (c.status === 'offline' ? 'dot-offline' : '');
+            
             const img = c.logo ? `<img src="${c.logo}" class="canal-img" onerror="this.src='https://via.placeholder.com/50/000/00ffcc?text=TV'">` : `<div class="canal-img">${c.name[0]}</div>`;
-            card.innerHTML = `${img} <div><b>${c.name}</b><br><small style="color:#8b949e;">Sinal Digital HD</small></div>`;
+            
+            card.innerHTML = `
+                <div class="status-dot ${statusClass}"></div>
+                ${img} 
+                <div><b>${c.name}</b><br><small style="color:#8b949e;">Status: ${c.status.toUpperCase()}</small></div>
+            `;
             card.onclick = () => play(c.stream, c.name);
             container.appendChild(card);
         });
+    }
+
+    // FUNÇÃO DE VARREDURA AVANÇADA (ON/OFF)
+    async function checkAllStatus() {
+        if(channels.length === 0) return alert("Carregue uma lista primeiro!");
+        document.getElementById('current').innerText = "VARRERNDO SINAIS... AGUARDE";
+        
+        // Testa os primeiros 20 canais rapidamente para não travar
+        const toTest = channels.slice(0, 30); 
+        
+        for(let i=0; i < toTest.length; i++) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 segundos de limite
+
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(toTest[i].stream)}`, { method: 'HEAD', signal: controller.signal });
+                channels[i].status = 'online';
+            } catch (e) {
+                channels[i].status = 'offline';
+            }
+            render(channels); // Atualiza a lista em tempo real
+        }
+        document.getElementById('current').innerText = "VARREDURA CONCLUÍDA";
     }
 
     function play(url, name) {
         document.getElementById('current').innerText = "📡 CONECTANDO: " + name;
         if (Hls.isSupported()) {
             hls.destroy();
-            hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+            hls = new Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                video.play();
-                document.getElementById('current').innerText = "📺 AO VIVO: " + name;
-            });
-        } else {
-            video.src = url;
-            video.play();
-        }
-        window.scrollTo({top: 0, behavior: 'smooth'});
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        } else { video.src = url; video.play(); }
     }
 
     function filter() {
