@@ -3,80 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | INFINITE TV</title>
+    <title>LÉO KAZAMA | ANIME & TV PREMIUM</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { --main: #00ffcc; --bg: #05070a; --card: #12161f; --text: #e6edf3; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        :root { --main: #00ffcc; --bg: #05070a; --card: #12161f; --text: #e6edf3; --anime: #ff007a; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        /* Header com Brilho Neon */
-        header { padding: 18px; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid #21262d; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
+        header { padding: 18px; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid #21262d; display: flex; justify-content: space-between; align-items: center; }
         header h1 { margin: 0; font-size: 20px; color: var(--main); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Player Premium */
-        .player-section { width: 100%; background: #000; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #161b22; }
-        .video-container { width: 100%; aspect-ratio: 16/9; position: relative; }
+        .player-section { width: 100%; background: #000; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--main); }
+        .video-container { width: 100%; aspect-ratio: 16/9; }
         video { width: 100%; height: 100%; display: block; }
 
-        .status-bar { font-size: 11px; color: var(--main); text-align: center; padding: 8px; background: rgba(0,255,204,0.03); font-weight: 600; letter-spacing: 0.5px; }
+        .status-bar { font-size: 11px; color: var(--main); text-align: center; padding: 8px; background: rgba(0,255,204,0.03); font-weight: bold; }
 
-        /* Controles Otimizados */
-        .controls { padding: 20px; display: flex; flex-direction: column; gap: 12px; background: linear-gradient(to bottom, #0a0c10, var(--bg)); }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .controls { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         
-        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        button:hover { border-color: var(--main); color: var(--main); transform: translateY(-2px); }
-        button:active { transform: scale(0.95); }
+        button { background: var(--card); color: #fff; border: 1px solid #30363d; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 10px; transition: 0.3s; }
+        button.anime-btn { border-color: var(--anime); color: var(--anime); }
+        button:active { background: var(--main); color: #000; }
         
-        input#search { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 14px; border-radius: 14px; width: 100%; outline: none; font-size: 14px; transition: 0.3s; }
-        input#search:focus { border-color: var(--main); box-shadow: 0 0 10px rgba(0, 255, 204, 0.1); }
+        input#search { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 12px; width: 100%; outline: none; }
 
-        /* Lista de Canais Fluida */
-        .list-container { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; display: grid; grid-template-columns: 1fr; gap: 12px; }
-        .canal-card { background: var(--card); padding: 14px; border-radius: 18px; display: flex; align-items: center; gap: 16px; border: 1px solid #21262d; cursor: pointer; transition: 0.2s; }
-        .canal-card:hover { background: #1c212b; border-color: #30363d; }
-        
+        .list-container { flex: 1; overflow-y: auto; padding: 0 15px 15px 15px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .canal-card { background: var(--card); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #21262d; cursor: pointer; }
         .canal-img { width: 50px; height: 50px; border-radius: 12px; background: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--main); border: 1px solid #30363d; object-fit: contain; }
-        .canal-info b { font-size: 15px; color: #fff; display: block; margin-bottom: 2px; }
-        .canal-info span { font-size: 12px; color: #7d8590; }
 
-        /* Loader de Carregamento */
-        .loader { width: 20px; height: 20px; border: 2px solid var(--main); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .tag-anime { font-size: 9px; background: var(--anime); color: #fff; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-top: 4px; display: inline-block; }
 
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--main); border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>LÉO KAZAMA VIP</h1>
-    <div id="loader" class="loader"></div>
-    <div id="count" style="font-size: 12px; color: var(--main); font-weight: bold;">SISTEMA PRONTO</div>
+    <div id="count" style="font-size: 12px; color: var(--main);">STREAM ON</div>
 </header>
 
 <div class="player-section">
     <div class="video-container">
         <video id="video" controls autoplay playsinline></video>
     </div>
-    <div class="status-bar" id="current">SELECIONE UMA CATEGORIA PARA INICIAR</div>
+    <div class="status-bar" id="current">MODO OTACU ATIVADO ⛩️</div>
 </div>
 
 <div class="controls">
     <div class="btn-grid">
         <button onclick="smartLoad('br')">BRASIL TV</button>
-        <button onclick="smartLoad('intl')">CANAIS MUNDIAIS</button>
+        <button class="anime-btn" onclick="smartLoad('anime')">ANIME VIP</button>
         <button onclick="smartLoad('pluto')">PLUTO GERAL</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Filtrar por nome do canal..." onkeyup="filter()">
+    <input type="text" id="search" placeholder="🔍 Buscar anime ou canal..." onkeyup="filter()">
 </div>
 
-<div class="list-container" id="lista">
-    <div style="text-align:center; padding:40px; color:#484f58;">
-        <p>Acesse as melhores fontes verificadas de 2026.</p>
-    </div>
+<div id="lista" class="list-container">
+    <p style="text-align:center; color:#555; margin-top:30px;">Escolha uma categoria acima.</p>
 </div>
 
 <script>
@@ -86,59 +72,53 @@
 
     const db = {
         br: 'https://iptv-org.github.io/iptv/countries/br.m3u',
-        intl: 'https://iptv-org.github.io/iptv/languages/por.m3u',
-        pluto: 'https://i.mjh.nz/PlutoTV/br.m3u8'
+        anime: 'https://i.mjh.nz/PlutoTV/br.m3u8', // Usaremos a Pluto BR para filtrar animes
+        pluto: 'https://i.mjh.nz/PlutoTV/all.m3u8'
     };
 
     async function smartLoad(key) {
-        showLoader(true);
         const url = db[key];
-        document.getElementById('current').innerText = "SINCRONIZANDO COM SERVIDORES...";
+        document.getElementById('current').innerText = "BUSCANDO SINAL DE ANIME...";
         
-        // SISTEMA DE TRIPLA REDUNDÂNCIA (Proxies diferentes para evitar erro)
-        const proxies = [
-            url, // Tentativa direta primeiro
-            `https://corsproxy.io/?${encodeURIComponent(url)}`,
-            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&cb=${Date.now()}`
-        ];
-
-        let success = false;
-        for (let p of proxies) {
-            try {
-                const response = await fetch(p);
-                const text = await response.text();
-                // AllOrigins retorna JSON, precisamos tratar
-                const cleanData = text.startsWith('{') ? JSON.parse(text).contents : text;
-                
-                if (cleanData && cleanData.includes('#EXTM3U')) {
-                    parse(cleanData);
-                    success = true;
-                    break;
-                }
-            } catch (e) { console.log("Falha no proxy, tentando próximo..."); }
+        try {
+            const proxy = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+            const response = await fetch(proxy);
+            const data = await response.text();
+            
+            if (data.includes('#EXTM3U')) {
+                parse(data, key === 'anime');
+            }
+        } catch (e) {
+            alert("Erro ao carregar lista. Tente novamente.");
         }
-
-        if (!success) {
-            alert("Erro de conexão. Tente novamente em instantes ou troque a conexão.");
-            document.getElementById('current').innerText = "ERRO NA REDE";
-        }
-        showLoader(false);
     }
 
-    function parse(data) {
+    function parse(data, filterAnime) {
         const lines = data.split('\n');
         channels = [];
+        const keywords = ["anime", "naruto", "desenho", "kids", "classic", "geek", "tatsunoko"];
+
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].includes('#EXTINF')) {
                 const name = lines[i].split(',')[1]?.trim() || "Canal HD";
                 const logo = lines[i].match(/tvg-logo="([^"]+)"/)?.[1] || "";
                 let stream = lines[i+1]?.trim();
-                if(stream && stream.startsWith('http')) channels.push({ name, logo, stream });
+                
+                if(stream && stream.startsWith('http')) {
+                    const isAnime = keywords.some(k => name.toLowerCase().includes(k));
+                    
+                    // Se o botão for Anime, só adiciona se tiver a keyword. Se não, adiciona tudo.
+                    if (filterAnime) {
+                        if (isAnime) channels.push({ name, logo, stream, isAnime: true });
+                    } else {
+                        channels.push({ name, logo, stream, isAnime });
+                    }
+                }
             }
         }
         render(channels);
-        document.getElementById('count').innerText = channels.length + " CANAIS ON";
-        document.getElementById('current').innerText = "LISTA CARREGADA COM SUCESSO";
+        document.getElementById('count').innerText = channels.length + " CANAIS";
+        document.getElementById('current').innerText = filterAnime ? "GRADE DE ANIMES CARREGADA" : "LISTA COMPLETA ON";
     }
 
     function render(data) {
@@ -147,31 +127,31 @@
         data.forEach(c => {
             const card = document.createElement('div');
             card.className = 'canal-card';
-            const img = c.logo ? `<img src="${c.logo}" class="canal-img" onerror="this.style.display='none'">` : `<div class="canal-img">${c.name[0]}</div>`;
-            card.innerHTML = `${img} <div class="canal-info"><b>${c.name}</b><span>Streaming 1080p • Digital</span></div>`;
+            const img = c.logo ? `<img src="${c.logo}" class="canal-img" onerror="this.style.display='none'">` : `<div class="canal-img">📺</div>`;
+            card.innerHTML = `
+                ${img} 
+                <div>
+                    <b>${c.name}</b><br>
+                    ${c.isAnime ? '<span class="tag-anime">ANIME 24H</span>' : '<span style="font-size:9px; color:#7d8590;">LIVE STREAM</span>'}
+                </div>`;
             card.onclick = () => play(c.stream, c.name);
             container.appendChild(card);
         });
     }
 
     function play(url, name) {
-        document.getElementById('current').innerText = "📺 REPRODUZINDO: " + name;
+        document.getElementById('current').innerText = "📺 ASSISTINDO: " + name;
         if (Hls.isSupported()) {
-            hls.destroy(); hls = new Hls({ lowLatencyMode: true });
+            hls.destroy(); hls = new Hls();
             hls.loadSource(url); hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
-        } else { video.src = url; video.play().catch(() => {}); }
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        } else { video.src = url; video.play(); }
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function filter() {
         const q = document.getElementById('search').value.toLowerCase();
         render(channels.filter(x => x.name.toLowerCase().includes(q)));
-    }
-
-    function showLoader(show) {
-        document.getElementById('loader').style.display = show ? 'block' : 'none';
-        document.getElementById('count').style.display = show ? 'none' : 'block';
     }
 </script>
 </body>
