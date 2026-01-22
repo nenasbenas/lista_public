@@ -3,172 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | ULTRA STABLE 2026</title>
+    <title>LÉO KAZAMA | INTELLIGENT VIP</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --neon: #00ffcc; --bg: #050505; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
-        
-        .container { width: 95%; max-width: 1000px; background: rgba(15,15,15,0.9); border: 1px solid rgba(0,255,204,0.2); border-radius: 30px; padding: 30px; position: relative; z-index: 10; transition: 0.5s; box-shadow: 0 0 40px rgba(0,0,0,0.8); }
-        
-        header h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; text-align: center; color: #fff; text-shadow: 0 0 10px var(--neon); margin-bottom: 20px; }
-        
-        .player-box { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 2px solid #111; margin-bottom: 20px; }
-        video { width: 100%; height: 100%; object-fit: contain; }
-
-        .ui-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        select, input { width: 100%; background: #111; border: 1px solid #333; padding: 12px; border-radius: 10px; color: #fff; font-size: 14px; outline: none; transition: 0.3s; }
-        select:focus, input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,204,0.2); }
-
-        .btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; }
-        button { cursor: pointer; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; transition: 0.3s; text-transform: uppercase; font-size: 12px; }
-        .btn-main { background: var(--neon); color: #000; }
-        .btn-sec { background: transparent; border: 1px solid var(--neon); color: var(--neon); }
-        button:hover { transform: translateY(-2px); opacity: 0.8; }
-
-        #loader { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 20; flex-direction: column; align-items: center; justify-content: center; }
-        .spin { width: 40px; height: 40px; border: 4px solid rgba(0,255,204,0.1); border-top-color: var(--neon); border-radius: 50%; animation: s 1s linear infinite; }
-        @keyframes s { to { transform: rotate(360deg); } }
-
-        /* Cinema Mode */
-        .cinema-on .container { border: none; background: transparent; box-shadow: none; transform: scale(1.1); }
-        .cinema-on header, .cinema-on .ui-grid, .cinema-on .btn-group, .cinema-on #channelList { display: none; }
-        #exit-cinema { display: none; position: fixed; top: 20px; right: 20px; z-index: 1000; background: red; color: #fff; }
+        :root { --neon: #00ffcc; --bg: #0a0a0a; --card: #151515; }
+        body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 90%; max-width: 800px; background: var(--card); padding: 25px; border-radius: 25px; border: 1px solid rgba(0,255,204,0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid #333; }
+        video { width: 100%; height: 100%; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        select, input { background: #222; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 10px; font-size: 14px; }
+        .btn-update { grid-column: span 2; background: var(--neon); color: #000; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .loading-overlay { display: none; text-align: center; color: var(--neon); font-size: 12px; margin-top: 5px; }
     </style>
 </head>
-<body id="b">
+<body>
 
-    <button id="exit-cinema" onclick="cinema(false)">SAIR DO CINEMA</button>
-
-    <div class="container">
-        <header><h1>LÉO KAZAMA VIP</h1></header>
-
-        <div class="player-box">
-            <div id="loader"><div class="spin"></div><p id="lt" style="margin-top:10px; font-size:12px;">CONECTANDO...</p></div>
-            <video id="v" controls></video>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn-main" onclick="cinema(true)"><i class="fas fa-expand"></i> MODO CINEMA</button>
-            <button class="btn-sec" onclick="location.reload()"><i class="fas fa-sync"></i> REFRESH LISTA</button>
-        </div>
-
-        <div class="ui-grid">
-            <select id="sel" onchange="load(this.value)">
-                <option value="">📂 ESCOLHER LISTA RAMYS</option>
-                <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR01.m3u8">🇧🇷 CANAIS BR 01</option>
-                <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR02.m3u8">🇧🇷 CANAIS BR 02</option>
-                <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial1.m3u8">🌍 MUNDIAL 01</option>
-            </select>
-            <input type="text" id="search" placeholder="🔍 Buscar canal..." onkeyup="filter()">
-        </div>
-
-        <select id="list" onchange="play(this.value)">
-            <option value="">📺 AGUARDANDO...</option>
-        </select>
+<div class="container">
+    <h2 style="text-align: center; letter-spacing: 3px; margin-top: 0;">LÉO KAZAMA VIP</h2>
+    
+    <div class="video-wrapper">
+        <video id="mainVideo" controls></video>
     </div>
 
-    <script>
-        const video = document.getElementById('v');
-        const listUi = document.getElementById('list');
-        const loader = document.getElementById('loader');
-        const lText = document.getElementById('lt');
-        let hls = new Hls({
-            manifestLoadingMaxRetry: 4,
-            manifestLoadingRetryDelay: 1000,
-            enableWorker: true
-        });
-        let rawData = [];
+    <div class="controls">
+        <button class="btn-update" onclick="forceUpdate()">🔄 FORÇAR ATUALIZAÇÃO DA LISTA</button>
+        
+        <select id="repoList" onchange="smartLoad(this.value)">
+            <option value="">📂 SELECIONE UMA LISTA</option>
+            <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR01.m3u8">Canais BR 01</option>
+            <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/CanaisBR02.m3u8">Canais BR 02</option>
+            <option value="https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2026/master/Lista%20Mundial1.m3u8">Mundial 01</option>
+        </select>
 
-        async function load(url) {
-            if (!url) return;
-            loader.style.display = 'flex';
-            lText.innerText = "BYPASSING SECURITY...";
-            
-            const proxies = [
-                `https://api.allorigins.win/get?url=${encodeURIComponent(url + '?v=' + Date.now())}`,
-                `https://corsproxy.io/?${encodeURIComponent(url)}`,
-                `https://thingproxy.freeboard.io/fetch/${url}`
-            ];
+        <input type="text" id="search" placeholder="🔍 Buscar canal..." onkeyup="filter()">
+        
+        <select id="channelList" style="grid-column: span 2;" onchange="play(this.value)">
+            <option value="">📺 AGUARDANDO LISTA...</option>
+        </select>
+    </div>
+    <div id="status" class="loading-overlay">PROCESSANDO...</div>
+</div>
 
-            let success = false;
-            for (let p of proxies) {
-                try {
-                    const res = await fetch(p);
-                    const json = await res.json();
-                    const content = json.contents || json;
-                    if (content.includes('#EXTM3U')) {
-                        parse(content);
-                        success = true;
-                        break;
-                    }
-                } catch (e) { console.log("Troca de proxy..."); }
-            }
-            
-            if (!success) alert("Erro: O GitHub bloqueou a conexão. Tente novamente.");
-            loader.style.display = 'none';
+<script>
+    const video = document.getElementById('mainVideo');
+    const channelSelect = document.getElementById('channelList');
+    const status = document.getElementById('status');
+    let hls = new Hls();
+    let currentData = [];
+
+    // Função para carregar de forma inteligente (usa cache se existir)
+    async function smartLoad(url) {
+        if (!url) return;
+        
+        const cached = localStorage.getItem(url);
+        if (cached) {
+            console.log("Usando lista do cache local...");
+            parseM3U(cached);
+            return;
         }
 
-        function parse(data) {
-            const lines = data.split('\n');
-            rawData = [];
-            for (let i = 0; i < lines.length; i++) {
-                if (lines[i].includes('#EXTINF')) {
-                    const n = lines[i].split(',')[1] || "Canal";
-                    const u = lines[i+1]?.trim();
-                    if (u && u.startsWith('http')) rawData.push({ n, u });
+        await fetchData(url);
+    }
+
+    async function fetchData(url) {
+        status.style.display = 'block';
+        status.innerText = "CONTORNANDO BLOQUEIO DO GITHUB...";
+        
+        // Rotação de Proxies para não ser banido
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            `https://corsproxy.io/?${encodeURIComponent(url)}`
+        ];
+
+        for (let p of proxies) {
+            try {
+                const res = await fetch(p);
+                const data = await res.json();
+                const content = data.contents || data;
+                
+                if (content && content.includes("#EXTM3U")) {
+                    localStorage.setItem(url, content); // Salva no cache para a próxima vez
+                    parseM3U(content);
+                    status.style.display = 'none';
+                    return;
                 }
-            }
-            render(rawData);
+            } catch (e) { console.warn("Proxy falhou, tentando o próximo..."); }
         }
+        
+        alert("O GitHub ainda está bloqueando. Tente trocar de rede ou aguarde 5 min.");
+        status.style.display = 'none';
+    }
 
-        function render(arr) {
-            listUi.innerHTML = `<option value="">✅ ${arr.length} CANAIS PRONTOS</option>`;
-            arr.forEach(c => {
-                const o = document.createElement('option');
-                o.value = c.u; o.textContent = c.n;
-                listUi.appendChild(o);
-            });
-        }
-
-        function filter() {
-            const s = document.getElementById('search').value.toLowerCase();
-            render(rawData.filter(x => x.n.toLowerCase().includes(s)));
-        }
-
-        function play(u) {
-            if (!u) return;
-            loader.style.display = 'flex';
-            lText.innerText = "ESTABILIZANDO SINAL...";
-            
-            if (Hls.isSupported()) {
-                hls.destroy();
-                hls = new Hls();
-                hls.loadSource(u);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play();
-                    loader.style.display = 'none';
-                });
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        lText.innerText = "ERRO NO LINK. TENTE OUTRO.";
-                        setTimeout(() => loader.style.display = 'none', 2000);
-                    }
-                });
-            } else {
-                video.src = u;
-                video.play();
-                loader.style.display = 'none';
+    function parseM3U(data) {
+        const lines = data.split('\n');
+        currentData = [];
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].includes('#EXTINF')) {
+                const name = lines[i].split(',')[1] || "Canal VIP";
+                const link = lines[i+1]?.trim();
+                if (link && link.startsWith('http')) currentData.push({ name, link });
             }
         }
+        render(currentData);
+    }
 
-        function cinema(on) {
-            document.getElementById('b').className = on ? 'cinema-on' : '';
-            document.getElementById('exit-cinema').style.display = on ? 'block' : 'none';
+    function render(list) {
+        channelSelect.innerHTML = `<option value="">✅ ${list.length} CANAIS CARREGADOS</option>`;
+        list.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.link;
+            opt.textContent = c.name;
+            channelSelect.appendChild(opt);
+        });
+    }
+
+    function filter() {
+        const query = document.getElementById('search').value.toLowerCase();
+        render(currentData.filter(c => c.name.toLowerCase().includes(query)));
+    }
+
+    function play(url) {
+        if (!url) return;
+        if (Hls.isSupported()) {
+            hls.destroy();
+            hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        } else {
+            video.src = url;
+            video.play();
         }
-    </script>
+    }
+
+    function forceUpdate() {
+        const currentUrl = document.getElementById('repoList').value;
+        if (!currentUrl) return alert("Selecione uma lista primeiro!");
+        localStorage.removeItem(currentUrl);
+        fetchData(currentUrl);
+    }
+</script>
+
 </body>
 </html>
