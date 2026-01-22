@@ -3,168 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÉO KAZAMA | INTELLIGENCE ENGINE</title>
+    <title>LÉO KAZAMA | ULTRA INTELLIGENCE 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { --glow: #00ffcc; --bg: #050505; --surface: #121212; }
-        body { background: var(--bg); color: #e0e0e0; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        :root { --neon: #00ffcc; --bg: #0a0a0a; --side: #111; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Painel Lateral de Controle */
-        .dashboard { display: grid; grid-template-columns: 350px 1fr; height: 100%; }
-        .sidebar { background: var(--surface); border-right: 1px solid #222; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        /* Painel Lateral */
+        .sidebar { width: 350px; background: var(--side); border-right: 2px solid var(--neon); padding: 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        .logo { text-align: center; font-size: 22px; font-weight: 900; color: var(--neon); letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 10px var(--neon); }
         
-        /* Player Profissional */
-        .main-view { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        .video-canvas { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; position: relative; }
+        /* Player Area */
+        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .video-container { width: 100%; max-width: 960px; aspect-ratio: 16/9; background: #000; border-radius: 20px; border: 2px solid #222; overflow: hidden; box-shadow: 0 0 40px rgba(0,255,204,0.1); }
         video { width: 100%; height: 100%; }
 
-        /* Inteligência de Captura */
-        .scanner-box { background: #1a1a1a; border-radius: 10px; padding: 15px; border-left: 4px solid var(--glow); }
-        .status-badge { font-size: 10px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: #333; margin-bottom: 10px; display: inline-block; }
-        .online { color: var(--glow); border: 1px solid var(--glow); }
-
-        input, select, button { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 6px; font-size: 13px; transition: 0.3s; }
-        button { background: var(--glow); color: #000; font-weight: bold; cursor: pointer; border: none; }
-        button:hover { filter: brightness(1.2); transform: translateY(-1px); }
-
-        .channel-card { background: #1a1a1a; padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; display: flex; justify-content: space-between; align-items: center; }
-        .channel-card:hover { border-color: var(--glow); background: #222; }
-        .channel-card span { font-size: 12px; font-weight: 500; }
+        /* Controles e Inputs */
+        input, button { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 14px; outline: none; transition: 0.3s; }
+        input { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+        input:focus { border-color: var(--neon); }
         
-        .loader-bar { height: 2px; width: 0%; background: var(--glow); transition: 0.5s; position: absolute; top: 0; }
+        .btn-capture { background: var(--neon); color: #000; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-capture:hover { filter: brightness(1.2); transform: scale(1.02); }
+        
+        .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .btn-small { background: #222; color: #aaa; font-size: 11px; padding: 8px; border: 1px solid #333; cursor: pointer; }
+        .btn-small:hover { border-color: var(--neon); color: var(--neon); }
+
+        /* Lista de Canais */
+        #channelList { flex-grow: 1; overflow-y: auto; margin-top: 15px; padding-right: 5px; }
+        .channel-item { padding: 12px; border-bottom: 1px solid #1a1a1a; cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 8px; transition: 0.2s; }
+        .channel-item:hover { background: #1a1a1a; transform: translateX(5px); }
+        .channel-item img { width: 45px; height: 45px; object-fit: contain; background: #000; border-radius: 5px; }
+        .channel-name { font-size: 13px; font-weight: 500; }
+
+        #status { font-size: 11px; text-align: center; color: var(--neon); min-height: 15px; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <div class="sidebar">
-        <h2 style="color: var(--glow); margin: 0; letter-spacing: 2px;">LÉO KAZAMA <span style="font-size: 12px; color: #fff;">v3.0</span></h2>
-        
-        <div class="scanner-box">
-            <span class="status-badge online">AI Scanner Ativo</span>
-            <input type="text" id="targetUrl" placeholder="Cole URL do GitHub, IP Shodan ou Pastebin...">
-            <button onclick="smartCapture()" style="margin-top: 10px;">CAPTURAR E VALIDAR</button>
-        </div>
+<div class="sidebar">
+    <div class="logo">LÉO KAZAMA VIP</div>
+    <div id="status">SISTEMA AGUARDANDO...</div>
 
-        <div id="stats" style="font-size: 11px; color: #888;">Canais validados: 0 | Latência: -- ms</div>
-        
-        <input type="text" id="filter" placeholder="🔍 Filtrar canais capturados..." onkeyup="filter()">
-        
-        <div id="channelContainer" style="overflow-y: auto; flex-grow: 1; padding-right: 5px;">
-            </div>
+    <div class="quick-links">
+        <button class="btn-small" onclick="fastLoad('pluto')">PLUTO TV BR</button>
+        <button class="btn-small" onclick="fastLoad('samsung')">SAMSUNG TV</button>
+        <button class="btn-small" onclick="fastLoad('iptvorg')">CANAIS ABERTOS</button>
+        <button class="btn-small" onclick="location.reload()">LIMPAR TUDO</button>
     </div>
 
-    <div class="main-view">
-        <div class="video-canvas">
-            <div id="loadBar" class="loader-bar"></div>
-            <video id="player" controls></video>
-        </div>
+    <input type="text" id="urlInput" placeholder="Cole URL M3U8 ou IP Shodan...">
+    <button class="btn-capture" onclick="smartCapture()">Capturar Canais</button>
+    
+    <input type="text" id="searchBox" placeholder="🔍 Filtrar por nome..." onkeyup="filterChannels()" style="margin-top: 10px;">
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-            <button onclick="changeRatio('16/9')" style="background: #333; color: #fff;">16:9</button>
-            <button onclick="changeRatio('4/3')" style="background: #333; color: #fff;">4:3</button>
-            <button onclick="forceReload()" style="background: #a00; color: #fff;">RECONECTAR SINAL</button>
-        </div>
+    <div id="channelList">
+        <p style="text-align: center; color: #555; font-size: 12px; margin-top: 20px;">Nenhuma lista carregada.</p>
     </div>
 </div>
 
+<div class="main-content">
+    <div class="video-container">
+        <video id="videoPlayer" controls autoplay></video>
+    </div>
+    <div id="nowPlaying" style="margin-top: 20px; font-weight: bold; color: var(--neon);"></div>
+</div>
+
 <script>
-    const video = document.getElementById('player');
-    const container = document.getElementById('channelContainer');
-    const loadBar = document.getElementById('loadBar');
+    const video = document.getElementById('videoPlayer');
+    const status = document.getElementById('st');
     let hls = new Hls();
-    let masterList = [];
+    let currentChannels = [];
 
-    // Captura Inteligente com Bypass e Validação
-    async function smartCapture() {
-        const url = document.getElementById('targetUrl').value;
-        if(!url) return;
+    // URLs Oficiais Blindadas
+    const fastLinks = {
+        pluto: 'https://i.mjh.nz/PlutoTV/br.m3u8',
+        samsung: 'https://i.mjh.nz/SamsungTVPlus/br.m3u8',
+        iptvorg: 'https://iptv-org.github.io/iptv/countries/br.m3u'
+    };
 
-        loadBar.style.width = "30%";
-        container.innerHTML = "<p style='text-align:center; font-size:12px;'>Varrendo servidor...</p>";
-
-        try {
-            // Rotação de Proxy para evitar bloqueio do GitHub/Shodan
-            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-            const response = await fetch(proxy);
-            const raw = await response.json();
-            const content = raw.contents;
-
-            if (content.includes("#EXTM3U")) {
-                loadBar.style.width = "70%";
-                processList(content);
-            } else {
-                alert("O alvo não retornou uma lista válida.");
-            }
-        } catch (e) {
-            alert("Erro na conexão. O servidor alvo pode estar protegido.");
-        }
-        loadBar.style.width = "100%";
-        setTimeout(() => loadBar.style.width = "0%", 1000);
+    function fastLoad(key) {
+        document.getElementById('urlInput').value = fastLinks[key];
+        smartCapture();
     }
 
-    function processList(data) {
+    async function smartCapture() {
+        let url = document.getElementById('urlInput').value.trim();
+        if (!url) return;
+
+        // Correção Automática de links do GitHub (Blob -> Raw)
+        if (url.includes("github.com") && !url.includes("raw.githubusercontent")) {
+            url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+        }
+
+        document.getElementById('status').innerText = "AUTENTICANDO E VARRENDO...";
+        
+        // Sistema Multi-Proxy (Tenta 3 caminhos diferentes se o alvo bloquear)
+        const proxyList = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            `https://thingproxy.freeboard.io/fetch/${url}`
+        ];
+
+        let content = null;
+        for (let p of proxyList) {
+            try {
+                const res = await fetch(p);
+                const data = await res.json();
+                content = data.contents || data;
+                if (content && content.includes("#EXTM3U")) break;
+            } catch (e) { console.warn("Proxy falhou, tentando o próximo..."); }
+        }
+
+        if (content && content.includes("#EXTM3U")) {
+            parseM3U(content);
+        } else {
+            document.getElementById('status').innerText = "ERRO: LISTA INVÁLIDA OU BLOQUEADA.";
+            alert("O servidor não respondeu. Tente os botões da Pluto TV.");
+        }
+    }
+
+    function parseM3U(data) {
         const lines = data.split('\n');
-        masterList = [];
+        currentChannels = [];
         
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].includes('#EXTINF')) {
-                const title = lines[i].split(',')[1] || "Canal Desconhecido";
-                let stream = "";
-                // Busca inteligente da URL nas próximas linhas
-                for(let j=i+1; j<=i+3; j++) {
-                    if(lines[j]?.trim().startsWith('http')) {
-                        stream = lines[j].trim();
+                const info = lines[i];
+                const name = info.split(',')[1]?.trim() || "Canal VIP";
+                const logo = info.match(/tvg-logo="([^"]+)"/)?.[1] || "";
+                
+                let link = "";
+                for (let j = i + 1; j < i + 5; j++) {
+                    if (lines[j]?.trim().startsWith('http')) {
+                        link = lines[j].trim();
                         break;
                     }
                 }
-                if(stream) masterList.push({ title: title.trim(), url: stream });
+                
+                if (link) currentChannels.push({ name, logo, link });
             }
         }
-        render(masterList);
-        updateStats();
+        renderChannels(currentChannels);
+        document.getElementById('status').innerText = `${currentChannels.length} CANAIS SINCRONIZADOS`;
     }
 
-    function render(list) {
+    function renderChannels(list) {
+        const container = document.getElementById('channelList');
         container.innerHTML = "";
+        
         list.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'channel-card';
-            card.innerHTML = `<span>${item.title}</span> <small style="color: #666;">HLS</small>`;
-            card.onclick = () => playStream(item.url);
-            container.appendChild(card);
+            const div = document.createElement('div');
+            div.className = 'channel-item';
+            div.innerHTML = `
+                <img src="${item.logo || 'https://via.placeholder.com/45/000/00ffcc?text=TV'}" onerror="this.src='https://via.placeholder.com/45/000/00ffcc?text=TV'">
+                <div class="channel-name">${item.name}</div>
+            `;
+            div.onclick = () => playStream(item.link, item.name);
+            container.appendChild(div);
         });
     }
 
-    function playStream(url) {
-        loadBar.style.width = "50%";
+    function playStream(url, name) {
+        document.getElementById('nowPlaying').innerText = "📡 TRANSMITINDO: " + name;
         if (Hls.isSupported()) {
             hls.destroy();
             hls = new Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                video.play();
-                loadBar.style.width = "100%";
-                setTimeout(() => loadBar.style.width = "0%", 500);
-            });
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        } else {
+            video.src = url;
+            video.play();
         }
     }
 
-    function filter() {
-        const term = document.getElementById('filter').value.toLowerCase();
-        const filtered = masterList.filter(c => c.title.toLowerCase().includes(term));
-        render(filtered);
-    }
-
-    function updateStats() {
-        document.getElementById('stats').innerText = `Canais capturados: ${masterList.length} | Latência: ${Math.floor(Math.random() * 50) + 20}ms`;
-    }
-
-    function changeRatio(ratio) {
-        document.querySelector('.video-canvas').style.aspectRatio = ratio;
+    function filterChannels() {
+        const query = document.getElementById('searchBox').value.toLowerCase();
+        const filtered = currentChannels.filter(c => c.name.toLowerCase().includes(query));
+        renderChannels(filtered);
     }
 </script>
-
 </body>
 </html>
