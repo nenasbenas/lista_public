@@ -17,49 +17,44 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; overflow: hidden; height: 100vh; }
 
-        /* TELA DE CARREGAMENTO (SPLASH) ATUALIZADA */
+        /* TELA DE CARREGAMENTO (SPLASH) AVANÇADA */
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #080a0f; /* Fundo escuro profundo para realçar o neon */
+            background: #000; 
             z-index: 9999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; transition: 1.5s ease;
+            align-items: center; justify-content: center; transition: 1s ease;
         }
         
         .logo-container {
-            width: 320px; 
-            height: 320px;
+            width: 320px; height: 320px;
             display: flex; align-items: center; justify-content: center;
-            animation: pulse-glow 3s infinite ease-in-out;
+            animation: pulse-glow 2.5s infinite ease-in-out;
         }
 
+        /* LOGO COM FILTROS DE REALCE NEON */
         .logo-img {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 204, 0.4));
+            filter: drop-shadow(0 0 15px var(--main));
+            will-change: transform, filter;
         }
 
         .loader-bar { 
             width: 220px; height: 4px; background: rgba(255,255,255,0.05); 
-            margin-top: 20px; border-radius: 10px; position: relative; 
-            overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 25px; border-radius: 10px; position: relative; 
+            overflow: hidden; border: 1px solid rgba(0, 255, 204, 0.1);
         }
-        
         .loader-fill { 
-            position: absolute; width: 45%; height: 100%; 
+            position: absolute; width: 40%; height: 100%; 
             background: linear-gradient(90deg, var(--main), var(--gold)); 
-            animation: loading 2s infinite linear; 
+            animation: loading 1.8s infinite linear; 
         }
 
-        @keyframes pulse-glow { 
-            0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 10px rgba(0,255,204,0.2)); } 
-            50% { transform: scale(1.03); filter: brightness(1.2) drop-shadow(0 0 30px rgba(0,255,204,0.5)); } 
-        }
-        
+        @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 10px var(--main)); } 50% { transform: scale(1.05); filter: brightness(1.2) drop-shadow(0 0 25px var(--main)); } }
         @keyframes loading { from { left: -100%; } to { left: 100%; } }
 
         /* APP PRINCIPAL */
-        #app { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1s; }
+        #app { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
         header { padding: 15px 20px; background: rgba(5,7,10,0.95); backdrop-filter: blur(15px); border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
         header h1 { margin: 0; font-size: 1.2rem; color: #fff; text-shadow: 0 0 10px var(--main); letter-spacing: 2px; }
 
@@ -86,7 +81,7 @@
 
 <div id="splash">
     <div class="logo-container">
-        <img src="https://i.ibb.co/3WfK9F7/213562.png" class="logo-img" alt="LÉO KAZAMA VIP">
+        <img src="https://i.ibb.co/3WfK9F7/213562.png" class="logo-img" alt="LÉO KAZAMA">
     </div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
@@ -99,7 +94,7 @@
 
     <div class="player-area">
         <div class="video-box"><video id="video" controls autoplay playsinline></video></div>
-        <div class="status" id="status">INICIALIZANDO LÉO KAZAMA VIP...</div>
+        <div class="status" id="status">SISTEMA LÉO KAZAMA PRONTO</div>
     </div>
 
     <div class="ui-panel">
@@ -108,7 +103,7 @@
             <button onclick="fetchList('anime', this)">ANIMES</button>
             <button onclick="fetchList('intl', this)">FILMES</button>
         </div>
-        <input type="text" id="search" placeholder="Procurar canal ou jogo..." onkeyup="filter()">
+        <input type="text" id="search" placeholder="Procurar canal..." onkeyup="filter()">
     </div>
     <div id="lista" class="list"></div>
 </div>
@@ -118,8 +113,8 @@
     let hls = new Hls();
     let channels = [];
 
-    window.onload = () => {
-        // Tempo de 4 segundos para a splash screen brilhar na tela
+    // Lógica de Splash Screen
+    window.addEventListener('load', () => {
         setTimeout(() => {
             const splash = document.getElementById('splash');
             splash.style.opacity = '0';
@@ -127,9 +122,9 @@
                 splash.style.display = 'none';
                 document.getElementById('app').style.opacity = '1';
                 fetchList('br', document.querySelector('button'));
-            }, 1500);
-        }, 4000); 
-    };
+            }, 1000);
+        }, 3500); 
+    });
 
     const api = {
         br: 'https://iptv-org.github.io/iptv/countries/br.m3u',
@@ -140,14 +135,14 @@
     async function fetchList(key, btn) {
         document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById('lista').innerHTML = "<div style='text-align:center; padding:50px; color:var(--main);'>CARREGANDO ACESSO VIP...</div>";
+        document.getElementById('lista').innerHTML = "<div style='text-align:center; padding:50px; color:var(--main);'>SINCRONIZANDO SERVIDORES...</div>";
 
         try {
             const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(api[key])}`);
             const data = await res.text();
             parse(data, key);
         } catch (e) { 
-            document.getElementById('status').innerText = "ERRO NA CONEXÃO";
+            document.getElementById('status').innerText = "ERRO DE CONEXÃO";
         }
     }
 
@@ -166,7 +161,7 @@
         }
         render(channels);
         document.getElementById('total').innerText = channels.length + " CANAIS";
-        document.getElementById('status').innerText = "SISTEMA ONLINE";
+        document.getElementById('status').innerText = "LÉO KAZAMA VIP ONLINE";
     }
 
     function render(data) {
@@ -183,13 +178,12 @@
     }
 
     function play(url, name) {
-        document.getElementById('status').innerText = "ASSISTINDO: " + name;
+        document.getElementById('status').innerText = "ASSISTINDO AGORA: " + name;
         if (Hls.isSupported()) {
             hls.destroy(); hls = new Hls();
             hls.loadSource(url); hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
         } else { video.src = url; video.play(); }
-        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function filter() {
