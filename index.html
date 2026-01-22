@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root { 
-            --main: #00ffcc; /* Cor Neon Principal */
+            --main: #00ffcc; 
             --gold: #d4af37;
             --bg: #05070a; 
             --card: #12161f; 
@@ -23,39 +23,40 @@
             background: #000; 
             z-index: 9999; display: flex; flex-direction: column;
             align-items: center; justify-content: center; transition: 1s ease;
-        }
-        
-        .logo-container {
-            width: 350px; /* Aumentei um pouco para destacar a nova logo circular */
-            height: 350px;
-            display: flex; align-items: center; justify-content: center;
-            animation: pulse-glow 2.5s infinite ease-in-out;
+            background-image: url('https://r.jina.ai/i/9e0099419b4843189e47262070e1781c'); /* Sua nova imagem */
+            background-size: cover;
+            background-position: center;
         }
 
-        .logo-img {
-            width: 100%; height: auto;
-            object-fit: contain;
-            /* Filtro ajustado para ressaltar o neon colorido da nova logo */
-            filter: drop-shadow(0 0 20px rgba(0, 255, 204, 0.6));
-            will-change: transform, filter;
+        /* Camada escura para dar contraste à barra de carregamento se necessário */
+        #splash::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8));
+            z-index: -1;
         }
 
         .loader-bar { 
-            width: 220px; height: 4px; background: rgba(255,255,255,0.05); 
-            margin-top: 25px; border-radius: 10px; position: relative; 
-            overflow: hidden; border: 1px solid rgba(0, 255, 204, 0.1);
+            width: 80%; max-width: 300px; height: 12px; 
+            background: rgba(0,0,0,0.5); 
+            margin-top: auto; margin-bottom: 60px; /* Posiciona na parte inferior como na imagem */
+            border-radius: 20px; position: relative; 
+            overflow: hidden; border: 2px solid var(--main);
+            box-shadow: 0 0 15px var(--main);
         }
+        
         .loader-fill { 
-            position: absolute; width: 40%; height: 100%; 
-            background: linear-gradient(90deg, var(--main), var(--gold)); 
-            animation: loading 1.8s infinite linear; 
+            position: absolute; width: 100%; height: 100%; 
+            background: linear-gradient(90deg, #39ff14, #00ffcc, #d4af37); 
+            animation: loading-fast 3.5s forwards linear; 
+            left: -100%;
         }
 
-        @keyframes pulse-glow { 
-            0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 15px var(--main)); } 
-            50% { transform: scale(1.03); filter: brightness(1.1) drop-shadow(0 0 30px var(--main)); } 
+        @keyframes loading-fast { 
+            0% { left: -100%; }
+            100% { left: 0%; }
         }
-        @keyframes loading { from { left: -100%; } to { left: 100%; } }
 
         /* APP PRINCIPAL */
         #app { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -84,9 +85,6 @@
 <body>
 
 <div id="splash">
-    <div class="logo-container">
-        <img src="https://files.oaiusercontent.com/file-KAnx2H27oD0m86L6L6YmD6?se=2026-01-22T14%3A48%3A50Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3De0885e7b-8356-42f4-a554-2092cc77218f.webp&sig=G07V8A1YnNbeT5x6b4pU4h8p%2B7o8z6B0f3vW9X2yJ0M%3D" class="logo-img" alt="LÉO KAZAMA">
-    </div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
 
@@ -126,7 +124,7 @@
                 document.getElementById('app').style.opacity = '1';
                 fetchList('br', document.querySelector('button'));
             }, 1000);
-        }, 3500); 
+        }, 4000); // 4 segundos para apreciar a arte de splash
     });
 
     const api = {
