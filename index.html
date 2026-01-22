@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LÉO KAZAMA | INFINITE VIP</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
@@ -14,99 +14,90 @@
             --text: #f0f6fc; 
         }
         
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; overflow: hidden; height: 100vh; }
 
-        /* TELA DE CARREGAMENTO (SPLASH) ATUALIZADA */
+        /* TELA DE CARREGAMENTO (SPLASH) */
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000;
-            /* Usando o link direto da imagem gerada */
-            background-image: url('https://r.jina.ai/i/9e0099419b4843189e47262070e1781c'); 
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            z-index: 9999; 
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: flex-end; /* Empurra a barra para baixo */
-            transition: opacity 1s ease;
+            background: #000; 
+            z-index: 10000; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end; 
+            transition: 1s ease;
         }
 
-        /* Overlay para garantir que a imagem não fique clara demais no fundo */
-        #splash::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.2); /* Escurece levemente a foto */
-            z-index: 1;
+        /* IMAGEM DE FUNDO - USANDO URL DIRETA DE ALTA DISPONIBILIDADE */
+        .splash-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://raw.githubusercontent.com/L-Kazama/files/main/splash.webp'), url('https://files.oaiusercontent.com/file-KAnx2H27oD0m86L6L6YmD6?se=2026-01-22T14%3A48%3A50Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3De0885e7b-8356-42f4-a554-2092cc77218f.webp&sig=G07V8A1YnNbeT5x6b4pU4h8p%2B7o8z6B0f3vW9X2yJ0M%3D');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
         }
 
         .loader-container {
-            position: relative;
-            z-index: 2; /* Fica acima da imagem e do overlay */
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 60px; /* Distância do rodapé */
-        }
-
-        .loader-text {
-            color: var(--main);
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #000;
+            width: 100%; display: flex; flex-direction: column;
+            align-items: center; padding-bottom: 80px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
         }
 
         .loader-bar { 
-            width: 250px; height: 8px; 
-            background: rgba(0,0,0,0.7); 
-            border-radius: 10px; position: relative; 
-            overflow: hidden; border: 1px solid var(--main);
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+            width: 70%; max-width: 250px; height: 6px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 10px; position: relative; overflow: hidden; 
+            border: 1px solid var(--main);
         }
-        
         .loader-fill { 
             position: absolute; width: 100%; height: 100%; 
-            background: linear-gradient(90deg, #39ff14, var(--main), var(--gold)); 
-            left: -100%;
-            animation: loading-fast 3.5s forwards cubic-bezier(0.4, 0, 0.2, 1); 
+            background: linear-gradient(90deg, #39ff14, var(--main)); 
+            left: -100%; animation: load 3.5s forwards; 
         }
-
-        @keyframes loading-fast { 
-            0% { left: -100%; }
-            100% { left: 0%; }
-        }
+        @keyframes load { to { left: 0; } }
 
         /* APP PRINCIPAL */
-        #app { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1.2s ease; }
-        header { padding: 15px 20px; background: rgba(5,7,10,0.95); backdrop-filter: blur(15px); border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 1.1rem; color: #fff; text-shadow: 0 0 10px var(--main); }
-
-        .player-area { width: 100%; background: #000; position: sticky; top: 0; z-index: 10; }
-        .video-box { width: 100%; aspect-ratio: 16/9; }
-        video { width: 100%; height: 100%; }
-        .status { font-size: 11px; color: var(--main); text-align: center; padding: 8px; background: #0a0e14; border-bottom: 1px solid rgba(0,255,204,0.2); }
-
-        .ui-panel { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        button { background: var(--card); color: #fff; border: 1px solid #2d3748; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 10px; cursor: pointer; }
-        button.active { background: var(--main); color: #000; border: none; }
+        #app { display: flex; flex-direction: column; height: 100vh; opacity: 0; transition: 1s ease; }
         
-        input { width: 100%; background: #0d1117; border: 1px solid #1f2937; color: #fff; padding: 15px; border-radius: 15px; outline: none; }
-        .list { flex: 1; overflow-y: auto; padding: 0 15px 15px; display: grid; gap: 10px; }
-        .card { background: var(--card); padding: 12px; border-radius: 18px; display: flex; align-items: center; gap: 12px; border: 1px solid #1f2937; }
-        .thumb { width: 50px; height: 50px; border-radius: 12px; object-fit: contain; background: #000; }
-        ::-webkit-scrollbar { width: 0; }
+        header { 
+            padding: 10px 20px; background: #000; border-bottom: 2px solid var(--gold); 
+            display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+        }
+        header h1 { margin: 0; font-size: 1rem; color: #fff; text-shadow: 0 0 10px var(--main); }
+
+        .player-area { width: 100%; background: #000; flex-shrink: 0; }
+        .video-box { width: 100%; aspect-ratio: 16/9; }
+        video { width: 100%; height: 100%; background: #000; }
+        .status { font-size: 10px; color: var(--main); text-align: center; padding: 6px; background: #0a0e14; border-bottom: 1px solid #1f2937; }
+
+        /* ÁREA DE CONTEÚDO ROLÁVEL */
+        .content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        .ui-panel { padding: 15px; position: sticky; top: 0; background: var(--bg); z-index: 5; }
+        .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        
+        button { 
+            background: var(--card); color: #fff; border: 1px solid #2d3748; 
+            padding: 12px; border-radius: 12px; font-weight: bold; font-size: 10px; 
+            cursor: pointer; text-transform: uppercase;
+        }
+        button.active { background: var(--main); color: #000; border: none; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
+        
+        input { width: 100%; background: #0d1117; border: 1px solid #1f2937; color: #fff; padding: 14px; border-radius: 12px; outline: none; }
+        
+        .list { padding: 0 15px 20px; display: grid; gap: 10px; }
+        .card { 
+            background: var(--card); padding: 12px; border-radius: 15px; 
+            display: flex; align-items: center; gap: 12px; border: 1px solid #1f2937;
+        }
+        .thumb { width: 45px; height: 45px; border-radius: 10px; object-fit: contain; background: #000; border: 1px solid #2d3748; }
+        .info b { display: block; font-size: 14px; color: #fff; }
+        .info span { font-size: 10px; color: #718096; }
     </style>
 </head>
 <body>
 
 <div id="splash">
+    <div class="splash-img"></div>
     <div class="loader-container">
-        <div class="loader-text">VALIDANDO ACESSO VIP</div>
+        <div style="color:var(--main); font-size: 10px; margin-bottom: 10px; font-weight: bold; letter-spacing: 2px;">INICIALIZANDO STREAM VIP</div>
         <div class="loader-bar"><div class="loader-fill"></div></div>
     </div>
 </div>
@@ -114,7 +105,7 @@
 <div id="app">
     <header>
         <h1>LÉO KAZAMA <span style="color: var(--gold)">VIP</span></h1>
-        <div id="total" style="font-size: 11px; color: var(--main);">0 CANAIS</div>
+        <div id="total" style="font-size: 10px; font-weight: bold; color: var(--main);">0 CANAIS</div>
     </header>
 
     <div class="player-area">
@@ -122,15 +113,17 @@
         <div class="status" id="status">SISTEMA LÉO KAZAMA PRONTO</div>
     </div>
 
-    <div class="ui-panel">
-        <div class="tabs">
-            <button onclick="fetchList('br', this)">TV BRASIL</button>
-            <button onclick="fetchList('anime', this)">ANIMES</button>
-            <button onclick="fetchList('intl', this)">FILMES</button>
+    <div class="content">
+        <div class="ui-panel">
+            <div class="tabs">
+                <button onclick="fetchList('br', this)">TV BRASIL</button>
+                <button onclick="fetchList('anime', this)">ANIMES</button>
+                <button onclick="fetchList('intl', this)">FILMES</button>
+            </div>
+            <input type="text" id="search" placeholder="Procurar canal..." onkeyup="filter()">
         </div>
-        <input type="text" id="search" placeholder="Procurar canal..." onkeyup="filter()">
+        <div id="lista" class="list"></div>
     </div>
-    <div id="lista" class="list"></div>
 </div>
 
 <script>
@@ -138,8 +131,8 @@
     let hls = new Hls();
     let channels = [];
 
-    // Lógica para esconder o Splash
-    window.addEventListener('load', () => {
+    // Mostra o Splash e inicia a carga
+    window.onload = () => {
         setTimeout(() => {
             document.getElementById('splash').style.opacity = '0';
             setTimeout(() => {
@@ -148,9 +141,8 @@
                 fetchList('br', document.querySelector('button'));
             }, 1000);
         }, 4000); 
-    });
+    };
 
-    // ... (suas funções fetchList, parse, render, play e filter permanecem iguais)
     const api = {
         br: 'https://iptv-org.github.io/iptv/countries/br.m3u',
         anime: 'https://iptv-org.github.io/iptv/categories/animation.m3u',
@@ -160,12 +152,15 @@
     async function fetchList(key, btn) {
         document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById('lista').innerHTML = "<div style='text-align:center; padding:50px; color:var(--main);'>SINCRONIZANDO SERVIDORES...</div>";
+        document.getElementById('lista').innerHTML = "<div style='text-align:center; padding:50px; color:var(--main); font-size:12px;'>ACESSANDO SERVIDORES...</div>";
+
         try {
             const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(api[key])}`);
             const data = await res.text();
             parse(data, key);
-        } catch (e) { document.getElementById('status').innerText = "ERRO DE CONEXÃO"; }
+        } catch (e) { 
+            document.getElementById('status').innerText = "ERRO DE CONEXÃO";
+        }
     }
 
     function parse(data, key) {
@@ -192,7 +187,7 @@
         data.forEach(c => {
             const card = document.createElement('div');
             card.className = 'card';
-            const img = c.logo ? `<img src="${c.logo}" class="thumb" onerror="this.src='https://via.placeholder.com/50/000/00ffcc?text=VIP'">` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--main); font-weight:bold;">VIP</div>`;
+            const img = c.logo ? `<img src="${c.logo}" class="thumb" onerror="this.src='https://via.placeholder.com/50/000/00ffcc?text=VIP'">` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--main); font-size:10px; font-weight:bold;">VIP</div>`;
             card.innerHTML = `${img}<div class="info"><b>${c.name}</b><span>SINAL DIGITAL • ${c.category}</span></div>`;
             card.onclick = () => play(c.stream, c.name);
             container.appendChild(card);
@@ -200,12 +195,14 @@
     }
 
     function play(url, name) {
-        document.getElementById('status').innerText = "ASSISTINDO AGORA: " + name;
+        document.getElementById('status').innerText = "ASSISTINDO: " + name;
         if (Hls.isSupported()) {
             hls.destroy(); hls = new Hls();
             hls.loadSource(url); hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
         } else { video.src = url; video.play(); }
+        // Rolar para o player em mobile
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function filter() {
